@@ -1,3 +1,14 @@
+*
+  box-sizing: border-box
+  &:before, &:after
+    box-sizing: border-box
+
+.clearfix:before, .clearfix:after
+  display: table
+  content: " "
+.clearfix:after
+  clear: both
+
 body, html
   margin: 0
   font-family: "Open Sans", "Helvetica Neue", Arial, Verdana, sans-serif
@@ -5,3 +16,16 @@ body, html
   -webkit-font-smoothing: antialiased
   height: 100%
   overflow: hidden
+
+#app
+  height: 100%
+  overflow: hidden
+  position: relative
+
+.homePageWrapper, .childrenPageWrapper
+  background-color: #f2f2f2
+  position: absolute 
+  left: 0
+  top: 0
+  right: 0
+  height: 100%

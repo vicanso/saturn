@@ -8,7 +8,7 @@
       :key="item.name"
       :id="item.id"
     >
-      <img slot="icon">
+      <img slot="icon" />
       {{ item.name }}
     </mt-tab-item>
   </mt-tabbar>
@@ -39,7 +39,7 @@ export default {
       ],
     };
   },
-}
+};
 </script>
 
 <style lang="sass" scoped>
@@ -49,4 +49,3 @@ export default {
   border-top: $GRAY_BORDER
   color: $COLOR_DARK_GRAY
 </style>
-
