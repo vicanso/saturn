@@ -1,0 +1,47 @@
+<template>
+  <div>
+    <mt-header
+      title="增加书籍来源"
+    >
+      <mt-button
+        icon="back"
+        slot="left"
+        @click="$router.back()"
+      ></mt-button>
+    </mt-header>
+    <mt-radio
+      title="来源选择"
+      v-model="source"
+      :options="sourceList"
+    ></mt-radio>
+    <mt-field
+      label="名称"
+      class="mtop10"
+      placeholder="请输入名称"
+      v-model="name"
+    ></mt-field>
+    <mt-field
+      label="作者"
+      class="mtop10"
+      placeholder="请输入作者"
+      v-model="author"
+    ></mt-field>
+    <mt-field
+      label="ID"
+      class="mtop10"
+      placeholder="请输入ID"
+      v-model="id"
+    ></mt-field>
+    <mt-button
+      type="primary"
+      size="large"
+      :style="{
+        marginTop: '30px',
+      }"
+      @click="submit"
+    >提交</mt-button>
+  </div>
+</template>
+
+<script src="./add-source.js">
+</script>

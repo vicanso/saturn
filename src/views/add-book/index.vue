@@ -1,7 +1,7 @@
 <template>
   <div>
     <mt-header
-      title="登录"
+      title="增加书籍"
     >
       <mt-button
         icon="back"
@@ -10,19 +10,17 @@
       ></mt-button>
     </mt-header>
     <mt-field
-      label="用户名"
-      class="mbottom10"
-      placeholder="请输入用户名"
-      v-model="account"
+      label="名称"
+      class="mtop10"
+      placeholder="请输入名称"
+      v-model="name"
     ></mt-field>
     <mt-field
-      label="密码"
-      class="mbottom10"
-      placeholder="请输入密码"
-      type="password"
-      v-model="password"
-    >
-    </mt-field>
+      label="作者"
+      class="mtop10"
+      placeholder="请输入作者"
+      v-model="author"
+    ></mt-field>
     <mt-button
       type="primary"
       size="large"
@@ -33,6 +31,6 @@
     >提交</mt-button>
   </div>
 </template>
-
-<script src="./login.js">
+  
+<script src="./add-book.js">
 </script>

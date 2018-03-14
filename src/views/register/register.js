@@ -1,4 +1,4 @@
-import { mapActions } from 'vuex';
+import {mapActions} from 'vuex';
 
 export default {
   data() {
@@ -9,33 +9,29 @@ export default {
     };
   },
   methods: {
-    ...mapActions([
-      'userRegister',
-    ]),
-    goBack() {
-      this.$router.back();
-    },
+    ...mapActions(['userRegister']),
     async submit() {
-      const {
-        account,
-        email,
-        password,
-      } = this;
+      const {account, email, password, submitting} = this;
+      if (submitting) {
+        return;
+      }
       if (!account || !email || !password) {
         this.$toast('必填字段不能为空');
         return;
       }
       const close = this.$loading();
+      this.submitting = true;
       try {
         await this.userRegister({
           account,
           password,
           email,
         });
-        this.goBack();
+        this.$router.back();
       } catch (err) {
         this.$toast(err);
       } finally {
+        this.submitting = false;
         close();
       }
     },

@@ -1,29 +1,28 @@
 import request from 'axios';
-import { sha256 } from '../../helpers/crypto';
+import _ from 'lodash';
+import {sha256} from '../../helpers/crypto';
 
-import {
-  USERS_ME,
-  USERS_REGISTER,
-  USERS_LOGIN,
-} from '../../urls';
-import {
-  USER_INFO
-} from '../mutation-types';
-import {
-  genPassword,
-} from '../../helpers/util';
+import {USERS_ME, USERS_REGISTER, USERS_LOGIN} from '../../urls';
+import {USER_INFO} from '../mutation-types';
+import {genPassword} from '../../helpers/util';
 
 const state = {
-  userInfo: null,
+  info: null,
 };
 
 const mutations = {
   [USER_INFO](state, data) {
-    state.userInfo = data;
+    const isAdmin = _.includes(data.roles, 'admin');
+    state.info = _.extend(
+      {
+        isAdmin,
+      },
+      data,
+    );
   },
 };
 
-const userGetInfo = async ({ commit }) => {
+const userGetInfo = async ({commit}) => {
   const res = await request.get(USERS_ME, {
     params: {
       'cache-control': 'no-cache',
@@ -33,7 +32,7 @@ const userGetInfo = async ({ commit }) => {
 };
 
 // 用户注册
-const userRegister = async ({ commit }, { account, password, email }) => {
+const userRegister = async ({commit}, {account, password, email}) => {
   const res = await request.post(USERS_REGISTER, {
     account,
     password: genPassword(account, password),
@@ -43,7 +42,7 @@ const userRegister = async ({ commit }, { account, password, email }) => {
 };
 
 // 用户登录
-const userLogin = async ({ commit }, { account, password }) => {
+const userLogin = async ({commit}, {account, password}) => {
   let res = await request.get(USERS_LOGIN, {
     params: {
       'cache-control': 'no-cache',

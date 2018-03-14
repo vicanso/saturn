@@ -1,3 +1,4 @@
+import 'intersection-observer';
 import Vue from 'vue';
 import _ from 'lodash';
 import Mint from 'mint-ui';
@@ -8,10 +9,7 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import './request-interceptors';
-import {
-  getErrorMessage,
-} from './helpers/util';
-
+import {getErrorMessage} from './helpers/util';
 
 Vue.use(Mint);
 VuexRouterSync.sync(store, router);
@@ -21,7 +19,7 @@ Vue.$router = router;
 Vue.$store = store;
 
 // eslint-disable-next-line
-Vue.config.productionTip = ENV === 'production' ;
+Vue.config.productionTip = ENV === 'production';
 
 Vue.prototype.$toast = (data, ms = 3000) => {
   let message = getErrorMessage(data);

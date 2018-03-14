@@ -12,6 +12,7 @@ module.exports = {
       new webpack.DefinePlugin({
         ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
         APP: JSON.stringify('novel'),
+        URL_PREFIX: JSON.stringify('/api'),
       }),
     ],
   },

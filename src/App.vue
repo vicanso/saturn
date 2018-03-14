@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import {mapActions} from 'vuex';
 import Home from './views/home';
 export default {
   name: 'app',
@@ -20,13 +20,10 @@ export default {
     Home,
   },
   methods: {
-    ...mapActions([
-      'userGetInfo',
-    ]),
+    ...mapActions(['userGetInfo']),
   },
   data() {
-    return {
-    };
+    return {};
   },
   async beforeMount() {
     const close = this.$loading();
@@ -37,7 +34,7 @@ export default {
     } finally {
       close();
     }
-  }
+  },
 };
 </script>
 

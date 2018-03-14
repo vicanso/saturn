@@ -1,6 +1,10 @@
-import { mapActions } from 'vuex';
+import {mapActions, mapState} from 'vuex';
+import ImageView from '../../components/ImageView';
 
 export default {
+  components: {
+    ImageView,
+  },
   data() {
     return {
       selected: 'hot',
@@ -24,12 +28,22 @@ export default {
       ],
     };
   },
-  methods: {
-    ...mapActions([
-      'bookHotList',
-    ]),
+  computed: {
+    ...mapState({
+      hotList: ({book}) => book.hotList,
+    }),
   },
-  beforeMount() {
-    this.bookHotList(0);
+  methods: {
+    ...mapActions(['bookHotList']),
+  },
+  async beforeMount() {
+    const close = this.$loading();
+    try {
+      this.bookHotList(0);
+    } catch (err) {
+      this.$toast(err);
+    } finally {
+      close();
+    }
   },
 };

@@ -6,18 +6,18 @@
       <mt-button
         icon="back"
         slot="left"
-        @click="goBack"
+        @click="$router.back()"
       ></mt-button>
     </mt-header>
     <mt-field
       label="用户名"
-      class="formItem"
+      class="mbottom10"
       placeholder="请输入用户名"
       v-model="account"
     ></mt-field>
     <mt-field
       label="邮箱"
-      class="formItem"
+      class="mbottom10"
       placeholder="请输入邮箱"
       type="email"
       v-model="email"
@@ -25,7 +25,7 @@
     </mt-field>
     <mt-field
       label="密码"
-      class="formItem"
+      class="mbottom10"
       placeholder="请输入密码"
       type="password"
       v-model="password"
@@ -34,11 +34,13 @@
     <mt-button
       type="primary"
       size="large"
-      class="formSubmit"
+      :style="{
+        marginTop: '30px',
+      }"
       @click="submit"
     >提交</mt-button>
   </div>
 </template>
 
-<script src="./register.js"></script>
-<style lang="sass" src="./register.sass" scoped></style>
+<script src="./register.js">
+</script>

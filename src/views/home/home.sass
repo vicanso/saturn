@@ -1,4 +1,5 @@
 @import "../../variables"
+$imageViewWidth: 120px
 .homePage
   padding-bottom: $MAIN_NAV_HEIGHT + 1
 
@@ -6,3 +7,22 @@
   background-color: #fff
   border-top: $GRAY_BORDER
   color: $COLOR_DARK_GRAY
+
+.hotList
+  margin: 0
+  padding: 0
+  list-style: none
+.bookView
+  height: 150px
+.imageView
+  width: $imageViewWidth
+  height: 100%
+  float: left
+  overflow: hidden
+  img
+    max-width: 100%
+.contentView
+  margin-left: $imageViewWidth + 10px
+  h5
+    margin: 0
+    padding: 0

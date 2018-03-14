@@ -13,8 +13,33 @@
         {{ item.name }}
       </mt-tab-item>
     </mt-tabbar>
+    <div
+      v-show="selected === 'hot'"
+    >
+      <ul
+        class="hotList"
+        v-if="hotList"
+      >
+        <li
+          v-for="item in hotList"
+          :key="item.no"
+          class="bookView"
+        >
+          <div class="imageView">
+            <image-view
+              :src="item.cover"
+            />
+          </div>
+          <div class="contentView">
+            <h5>{{item.name}}</h5>
+            <p>{{item.brief}}</p>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
-<script src="./home.js"></script>
+<script src="./home.js">
+</script>
 <style lang="sass" src="./home.sass" scoped></style>

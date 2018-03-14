@@ -21,7 +21,7 @@ router.beforeEach((to, from, next) => {
   next();
 });
 
-router.afterEach((to) => {
+router.afterEach(to => {
   if (!pageLoadStats || pageLoadStats.name !== to.name) {
     return;
   }
