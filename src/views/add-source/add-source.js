@@ -12,10 +12,6 @@ export default {
           label: '笔趣阁',
           value: 'biquge',
         },
-        {
-          label: '测试',
-          value: 'test',
-        },
       ],
     };
   },

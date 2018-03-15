@@ -2,22 +2,26 @@
   <div class="homePage">
     <mt-tabbar
       v-model="selected"
-      class="tabbar"
+      class="tabBar"
     >
       <mt-tab-item
         v-for="item in items"
         :key="item.name"
         :id="item.id"
+        class="tabItem"
       >
-        <img slot="icon" />
+        <div
+          :class="item.cls + ' iconfont'"
+        ></div>
         {{ item.name }}
       </mt-tab-item>
     </mt-tabbar>
     <div
       v-show="selected === 'hot'"
+      class="fullHeight"
     >
       <ul
-        class="hotList"
+        class="hotList fullHeightScroll"
         v-if="hotList"
       >
         <li
@@ -31,8 +35,20 @@
             />
           </div>
           <div class="contentView">
-            <h5>{{item.name}}</h5>
-            <p>{{item.brief}}</p>
+            <h3 class="font16">{{item.name}}</h3>
+            <p class="font14">{{item.brief}}</p>
+            <div
+              class="pullRight"
+            >
+              <span
+                class="category"
+                v-if="item.category && item.category[0]"
+              >{{item.category[0]}}</span>
+              <span class="category"> {{Math.ceil(item.wordCount / 10000) + '万字'}}</span>
+            </div>
+            <div
+              class="font14 ellipsis author"
+            >{{item.author}}</div>
           </div>
         </li>
       </ul>

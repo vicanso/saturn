@@ -1,28 +1,60 @@
 @import "../../variables"
-$imageViewWidth: 120px
+$imageViewWidth: 100px
 .homePage
   padding-bottom: $MAIN_NAV_HEIGHT + 1
 
-.tabbar
+.tabBar
   background-color: #fff
   border-top: $GRAY_BORDER
   color: $COLOR_DARK_GRAY
+  .tabItem
+    padding: 5px 0 3px 0 
+    font-size: 12px
+    line-height: 18px
+    .iconfont
+      font-size: 20px
+      margin: 4px 0 6px 0
 
 .hotList
   margin: 0
   padding: 0
   list-style: none
 .bookView
-  height: 150px
+  padding: 10px
+  height: 120px
+  background-color: $COLOR_WHITE
+  margin-bottom: 15px
+  &:last-child
+    margin-bottom: 2px
 .imageView
   width: $imageViewWidth
   height: 100%
   float: left
   overflow: hidden
-  img
-    max-width: 100%
 .contentView
   margin-left: $imageViewWidth + 10px
-  h5
+  h3
     margin: 0
     padding: 0
+    line-height: 30px
+  p
+    margin: 0
+    $lineHeight: 25px
+    line-height: $lineHeight 
+    height: 2 * $lineHeight 
+    overflow: hidden
+    color: $COLOR_DARK_GRAY
+  .category
+    border-radius: 3px
+    margin: 0
+    margin-left: 5px
+    padding: 1px 4px
+    font-size: 14px
+    &:nth-child(2n)
+      color: $COLOR_DARK_GRAY
+      border: 1px solid $COLOR_DARK_GRAY
+    &:nth-child(2n + 1)
+      color: $COLOR_DARK_BLUE
+      border: 1px solid $COLOR_DARK_BLUE
+  .author
+    color: $COLOR_DARK_GRAY

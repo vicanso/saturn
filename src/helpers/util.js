@@ -25,3 +25,19 @@ export const genPassword = (account, password) => {
   const app = APP || 'unknown';
   return sha256(`${account}-${pwd}-${app}`);
 };
+
+export const getDate = str => {
+  const date = new Date(str);
+  const fill = v => {
+    if (v > 10) {
+      return `${v}`;
+    }
+    return `0${v}`;
+  };
+  const month = fill(date.getMonth() + 1);
+  const day = fill(date.getDay());
+  const hours = fill(date.getHours());
+  const mintues = fill(date.getMinutes());
+  const seconds = fill(date.getSeconds());
+  return `${date.getFullYear()}-${month}-${day} ${hours}:${mintues}:${seconds}`;
+};

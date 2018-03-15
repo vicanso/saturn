@@ -12,18 +12,22 @@ export default {
         {
           id: 'shelf',
           name: '书架',
+          cls: 'icon-all',
         },
         {
           id: 'hot',
           name: '精选',
+          cls: 'icon-creditlevel',
         },
         {
           id: 'books',
           name: '书库',
+          cls: 'icon-viewgallery',
         },
         {
           id: 'find',
           name: '发现',
+          cls: 'icon-originalimage',
         },
       ],
     };

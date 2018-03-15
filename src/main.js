@@ -5,6 +5,7 @@ import Mint from 'mint-ui';
 import VuexRouterSync from 'vuex-router-sync';
 import 'mint-ui/lib/style.css';
 
+import './assets/iconfont/iconfont.css';
 import App from './App.vue';
 import router from './router';
 import store from './store';

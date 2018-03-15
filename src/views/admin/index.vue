@@ -17,14 +17,22 @@
           title="增加来源"
           @click.native="go('/admin/add-source')"
           is-link
-        >
-        </mt-cell>
+        ></mt-cell>
         <mt-cell
           title="增加书籍"
           @click.native="go('/admin/add-book')"
           is-link
-        >
-        </mt-cell>
+        ></mt-cell>
+        <mt-cell
+          title="更新书籍"
+          @click.native="go('/admin/update-book')"
+          is-link
+        ></mt-cell>
+        <mt-cell
+          title="修改书籍"
+          @click.native="go('/admin/modify-book')"
+          is-link
+        ></mt-cell>
       </div>
     </div>
   </div>

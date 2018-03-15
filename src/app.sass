@@ -1,3 +1,4 @@
+@import "./variables"
 *
   box-sizing: border-box
   &:before, &:after
@@ -17,12 +18,31 @@
   text-align: center
 .fleft
   float: left
+.ellipsis
+  white-space: nowrap
+  text-overflow: ellipsis
+  overflow: hidden
+.font16
+  font-size: 16px
+.font14
+  font-size: 14px
+
+.fullHeight
+  height: 100%
+  overflow: hidden
+.fullHeightScroll
+  height: 100%
+  overflow: auto
+  -webkit-overflow-scrolling: touch
+.pullRight
+  float: right
 
 body, html
   margin: 0
   font-family: "Open Sans", "Helvetica Neue", Arial, Verdana, sans-serif
   height: 100%
   overflow: hidden
+  color: $COLOR_LIGHT_BLACK
 
 #app
   height: 100%
