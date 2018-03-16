@@ -1,4 +1,5 @@
 import {mapActions} from 'vuex';
+import _ from 'lodash';
 
 export default {
   data() {
@@ -49,6 +50,7 @@ export default {
           brief,
           category,
         });
+        this.$toast('已成功修改信息');
       } catch (err) {
         this.$toast(err);
       } finally {

@@ -3,6 +3,7 @@ module.exports = {
   devServer: {
     proxy: {
       '/api': {
+        // target: 'http://xs.aslant.site',
         target: 'http://127.0.0.1:5018',
       },
     },

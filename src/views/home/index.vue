@@ -16,43 +16,95 @@
         {{ item.name }}
       </mt-tab-item>
     </mt-tabbar>
+    <!-- 精选 BEGIN -->
     <div
       v-show="selected === 'hot'"
-      class="fullHeight"
+      class="fullHeight hotView"
     >
       <ul
         class="hotList fullHeightScroll"
-        v-if="hotList"
       >
         <li
           v-for="item in hotList"
           :key="item.no"
-          class="bookView"
+          class="bookViewWrapper"
         >
-          <div class="imageView">
-            <image-view
-              :src="item.cover"
-            />
-          </div>
-          <div class="contentView">
-            <h3 class="font16">{{item.name}}</h3>
-            <p class="font14">{{item.brief}}</p>
-            <div
-              class="pullRight"
-            >
-              <span
-                class="category"
-                v-if="item.category && item.category[0]"
-              >{{item.category[0]}}</span>
-              <span class="category"> {{Math.ceil(item.wordCount / 10000) + '万字'}}</span>
-            </div>
-            <div
-              class="font14 ellipsis author"
-            >{{item.author}}</div>
-          </div>
+          <BookView
+            :style="{
+              height: '110px',
+            }"
+            :book="item"
+          ></BookView>
         </li>
       </ul>
     </div>
+    <!-- 精选 END -->
+
+    <!-- 书库 BEGIN -->
+    <div
+      v-show="selected === 'books'"
+      class="fullHeight booksView"
+    >
+      <ul
+        class="categoryList fullHeightScroll"
+      >
+        <li
+          v-for="(item, index) in categoryList"
+          :key="item.name"
+          :class="{
+            active: selectedCategory === index, 
+          }"
+          @click="changeCategory(index)"
+        >{{item.name}}</li>
+      </ul>
+      <div class="books fullHeightScroll">
+        <p v-if="!categoryBooks.items || categoryBooks.items.length === 0" class="tac">正在加载中...</p>
+        <ul v-else>
+          <li
+            v-for="item in categoryBooks.items"
+            :key="item.no"
+            class="bookViewWrapper"
+          >
+            <BookView
+              :style="{
+                height: '110px',
+              }"
+              :book="item"
+            ></BookView>
+          </li>
+          <intersection
+            :style="{
+              height: '3px',
+            }"
+            v-on:intersection="loadMoreByCategory"
+          >
+          </intersection>
+        </ul>
+      </div>
+    </div>
+    <!-- 书库 END -->
+
+    <!-- 发现 BEGIN -->
+    <div
+      v-show="selected === 'find'"
+      class="fullHeight"
+    >
+      <mt-search
+        v-model="keyword"
+        :style="{
+          height: '100%',
+          position: 'relative',
+        }"
+      >
+        <mt-cell
+          v-for="item in searchBooks"
+          :key="item.name"
+          :title="item.name"
+          :value="item.author"
+        ></mt-cell>
+      </mt-search>
+    </div>
+    <!-- 发现 END -->
   </div>
 </template>
 

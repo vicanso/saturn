@@ -27,7 +27,7 @@ export default {
     ...mapActions(['bookList', 'bookUpdateInfo']),
     async update(item) {
       try {
-        const action = await MessageBox.confirm(`确认更新${item.name}吗？`);
+        await MessageBox.confirm(`确认更新${item.name}吗？`);
         this.bookUpdateInfo(item.no);
       } catch (err) {
         console.error(err);

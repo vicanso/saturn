@@ -1,5 +1,4 @@
 @import "../../variables"
-$imageViewWidth: 100px
 .homePage
   padding-bottom: $MAIN_NAV_HEIGHT + 1
 
@@ -15,46 +14,49 @@ $imageViewWidth: 100px
       font-size: 20px
       margin: 4px 0 6px 0
 
-.hotList
-  margin: 0
-  padding: 0
-  list-style: none
-.bookView
-  padding: 10px
-  height: 120px
-  background-color: $COLOR_WHITE
-  margin-bottom: 15px
-  &:last-child
-    margin-bottom: 2px
-.imageView
-  width: $imageViewWidth
-  height: 100%
-  float: left
-  overflow: hidden
-.contentView
-  margin-left: $imageViewWidth + 10px
-  h3
+.hotView
+  .hotList
     margin: 0
     padding: 0
-    line-height: 30px
-  p
+    list-style: none
+  .bookViewWrapper
+    padding: 10px
+    background-color: $COLOR_WHITE
+    margin-bottom: 15px
+    &:last-child
+      margin-bottom: 2px
+
+.booksView
+  background-color: $COLOR_WHITE
+  $categoryListWidth: 80px
+  .categoryList
     margin: 0
-    $lineHeight: 25px
-    line-height: $lineHeight 
-    height: 2 * $lineHeight 
-    overflow: hidden
-    color: $COLOR_DARK_GRAY
-  .category
-    border-radius: 3px
-    margin: 0
-    margin-left: 5px
-    padding: 1px 4px
-    font-size: 14px
-    &:nth-child(2n)
-      color: $COLOR_DARK_GRAY
-      border: 1px solid $COLOR_DARK_GRAY
-    &:nth-child(2n + 1)
-      color: $COLOR_DARK_BLUE
-      border: 1px solid $COLOR_DARK_BLUE
-  .author
-    color: $COLOR_DARK_GRAY
+    padding: 0
+    list-style: none
+    width: $categoryListWidth
+    background-color: $COLOR_DARY_WHITE
+    float: left
+    li
+      line-height: 40px
+      text-align: center
+      border-left: 3px solid $COLOR_DARY_WHITE
+      &.active
+        border-color: $COLOR_BLUE
+        color: $COLOR_BLUE
+        background-color: $COLOR_WHITE
+  .books
+    margin-left: $categoryListWidth
+    background-color: $COLOR_DARY_WHITE
+    ul
+      margin: 0
+      padding: 0
+      list-style: none
+
+
+.hotView, .booksView
+  .bookViewWrapper
+    padding: 10px
+    background-color: $COLOR_WHITE
+    margin-top: 15px
+    &:first-child
+      margin-top: 0px

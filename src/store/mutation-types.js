@@ -1,3 +1,5 @@
 export const USER_INFO = 'USER_INFO';
 
 export const BOOK_HOT_LIST = 'BOOK_HOT_LIST';
+export const BOOK_CATEGORY_LIST = 'BOOK_CATEGORY_LIST';
+export const BOOK_LIST_BY_CATEGORY = 'BOOK_LIST_BY_CATEGORY';
