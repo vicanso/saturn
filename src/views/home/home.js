@@ -58,6 +58,14 @@ export default {
       'bookListByCategory',
       'bookSearch',
     ]),
+    showDetail(no) {
+      this.$router.push({
+        name: 'detail',
+        params: {
+          no,
+        },
+      });
+    },
     // 查询
     async search() {
       const {keyword} = this;

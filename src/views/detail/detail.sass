@@ -1,0 +1,55 @@
+@import "../../variables"
+
+.bookView
+  $functionHeight: 50px
+  $imageViewWidth: 100px
+  padding-top: 40px
+  padding-bottom: $functionHeight
+  .infoView
+    background-color: $COLOR_WHITE 
+  .imageView
+    float: left
+    width: $imageViewWidth
+  .contentView
+    margin-left: $imageViewWidth + 15px
+    h4
+      margin: 0
+      padding: 0
+      line-height: 24px
+    .info
+      color: $COLOR_BLUE
+      margin: 5px 0
+    .wordCount
+      margin: 5px 0
+      color: $COLOR_GRAY
+  .briefView
+    margin: 0 
+    border-top: $GRAY_BORDER
+    line-height: 1.5em
+    padding: 15px
+  .latestChapter
+    border-top: $GRAY_BORDER
+    line-height: 50px
+    padding: 0 15px
+    span, i
+      color: $COLOR_GRAY
+      margin: 0 2px
+  .functionView
+    position: fixed
+    height: $functionHeight 
+    line-height: $functionHeight
+    background-color: $COLOR_WHITE
+    left: 0
+    right: 0
+    bottom: 0
+    a
+      display: inline-block
+      height: 100%
+      width: 30%
+      text-decoration: none
+      color: $COLOR_BLUE
+      text-align: center
+      &.read
+        width: 40%
+        background-color: $COLOR_BLUE
+        color: $COLOR_WHITE

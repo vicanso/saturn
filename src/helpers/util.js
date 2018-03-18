@@ -29,13 +29,13 @@ export const genPassword = (account, password) => {
 export const getDate = str => {
   const date = new Date(str);
   const fill = v => {
-    if (v > 10) {
+    if (v >= 10) {
       return `${v}`;
     }
     return `0${v}`;
   };
   const month = fill(date.getMonth() + 1);
-  const day = fill(date.getDay());
+  const day = fill(date.getDate());
   const hours = fill(date.getHours());
   const mintues = fill(date.getMinutes());
   const seconds = fill(date.getSeconds());

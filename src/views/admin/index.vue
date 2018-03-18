@@ -15,22 +15,22 @@
       <div v-else>
         <mt-cell
           title="增加来源"
-          @click.native="go('/admin/add-source')"
+          @click.native="go('add-source')"
           is-link
         ></mt-cell>
         <mt-cell
           title="增加书籍"
-          @click.native="go('/admin/add-book')"
+          @click.native="go('add-book')"
           is-link
         ></mt-cell>
         <mt-cell
           title="更新书籍"
-          @click.native="go('/admin/update-book')"
+          @click.native="go('update-book')"
           is-link
         ></mt-cell>
         <mt-cell
           title="修改书籍"
-          @click.native="go('/admin/modify-book')"
+          @click.native="go('modify-book')"
           is-link
         ></mt-cell>
       </div>

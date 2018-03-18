@@ -54,7 +54,7 @@ $imageViewWidth: 100px
     padding: 0
     line-height: 30px
   p
-    margin: 0
+    margin: 0 0 10px 0
     $lineHeight: 25px
     line-height: $lineHeight 
     height: 2 * $lineHeight 

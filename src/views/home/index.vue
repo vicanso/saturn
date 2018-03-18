@@ -34,6 +34,7 @@
               height: '110px',
             }"
             :book="item"
+            @click.native="showDetail(item.no)"
           ></BookView>
         </li>
       </ul>
@@ -70,6 +71,7 @@
                 height: '110px',
               }"
               :book="item"
+              @click.native="showDetail(item.no)"
             ></BookView>
           </li>
           <intersection

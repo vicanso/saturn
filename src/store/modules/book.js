@@ -156,6 +156,14 @@ const bookSearch = async (tmp, {keyword}) => {
   return res.data.list;
 };
 
+// 获取书籍详情
+const bookGetDetail = async (tmp, no) => {
+  const res = await request.get(BOOKS_DETAIL.replace(':no', no));
+  const item = res.data;
+  genCover(item);
+  return item;
+};
+
 export const actions = {
   bookHotList,
   bookAddSource,
@@ -166,6 +174,7 @@ export const actions = {
   bookCategoryList,
   bookListByCategory,
   bookSearch,
+  bookGetDetail,
 };
 
 export default {

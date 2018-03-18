@@ -4,8 +4,10 @@ export default {
     return {};
   },
   methods: {
-    go(url) {
-      this.$router.push(url);
+    go(name) {
+      this.$router.push({
+        name,
+      });
     },
   },
   watch: {
