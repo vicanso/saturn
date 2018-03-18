@@ -1,12 +1,13 @@
 @import "../../variables"
+$functionHeight: 50px
+$imageViewWidth: 100px
 
 .bookView
-  $functionHeight: 50px
-  $imageViewWidth: 100px
   padding-top: 40px
   padding-bottom: $functionHeight
   .infoView
-    background-color: $COLOR_WHITE 
+    background-color: $COLOR_WHITE
+    margin-bottom: 15px
   .imageView
     float: left
     width: $imageViewWidth
@@ -34,22 +35,22 @@
     span, i
       color: $COLOR_GRAY
       margin: 0 2px
-  .functionView
-    position: fixed
-    height: $functionHeight 
-    line-height: $functionHeight
-    background-color: $COLOR_WHITE
-    left: 0
-    right: 0
-    bottom: 0
-    a
-      display: inline-block
-      height: 100%
-      width: 30%
-      text-decoration: none
-      color: $COLOR_BLUE
-      text-align: center
-      &.read
-        width: 40%
-        background-color: $COLOR_BLUE
-        color: $COLOR_WHITE
+.functionView
+  position: fixed 
+  height: $functionHeight 
+  line-height: $functionHeight
+  background-color: $COLOR_WHITE
+  left: 0
+  right: 0
+  bottom: 0
+  a
+    display: inline-block
+    height: 100%
+    width: 30%
+    text-decoration: none
+    color: $COLOR_BLUE
+    text-align: center
+    &.read
+      width: 40%
+      background-color: $COLOR_BLUE
+      color: $COLOR_WHITE

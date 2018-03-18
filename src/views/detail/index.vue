@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="fullHeight">
     <mt-header
       :title="title"
       fixed
@@ -11,9 +11,23 @@
       ></mt-button>
     </mt-header>
     <div
-      v-if="book"
-      class="bookView fullHeightScroll"
+      class="functionView"
     >
+      <a
+        href="javascript:;"
+      >下载</a>
+      <a
+        href="javascript:;"
+        class="read"
+      >免费阅读</a>
+      <a
+        href="javascript:;"
+      >加入书架</a>
+    </div>
+    <div
+      v-if="book"
+      class="bookView fullHeight"
+    ><div class="fullHeightScroll">
       <div
         class="infoView"
       >
@@ -54,21 +68,7 @@
           >连载至{{book.latestChapter.no + 1}}章</span>
         </div>
       </div>
-      <div
-        class="functionView"
-      >
-        <a
-          href="javascript:;"
-        >下载</a>
-        <a
-          href="javascript:;"
-          class="read"
-        >免费阅读</a>
-        <a
-          href="javascript:;"
-        >加入书架</a>
-      </div>
-    </div>
+    </div></div>
   </div>
 </template>
 <script src="./detail.js">
