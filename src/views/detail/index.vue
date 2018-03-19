@@ -3,15 +3,17 @@
     <mt-header
       :title="title"
       fixed
+      v-if="mode !== 2"
     >
       <mt-button
         icon="back"
         slot="left"
-        @click="$router.back()"
+        @click="back"
       ></mt-button>
     </mt-header>
     <div
       class="functionView"
+      v-if="mode === 0"
     >
       <a
         href="javascript:;"
@@ -19,13 +21,14 @@
       <a
         href="javascript:;"
         class="read"
+        @click="goOnReading"
       >免费阅读</a>
       <a
         href="javascript:;"
       >加入书架</a>
     </div>
     <div
-      v-if="book"
+      v-if="book && mode === 0"
       class="bookView fullHeight"
     ><div class="fullHeightScroll">
       <div
@@ -56,7 +59,10 @@
           </div>
         </div>
         <p class="briefView font14">{{book.brief}}</p>
-        <div class="latestChapter">查看目录
+        <div
+          class="latestChapter"
+          @click="mode = 1"
+        >查看目录
           <i class="pullRight mintui mintui-back rotate180 font14"></i>
           <span
             v-if="updatedAt"
@@ -69,6 +75,47 @@
         </div>
       </div>
     </div></div>
+    <div
+      v-if="mode === 1"
+      class="chaptersView fullHeight"
+    >
+      <p
+        class="tac"
+        v-if="!chapters"
+      >正在加载中，请稍候...</p>
+      <div
+        v-else
+        class="fullHeightScroll"
+      >
+        <mt-cell
+          class="chapter"
+          v-for="(item, index) in chapters"
+          :key="index"
+          :title="item.title"
+          @click.native="read(index)"
+        ></mt-cell>
+      </div>
+    </div>
+    <div
+      v-if="mode === 2"
+      class="fullHeight"
+    >
+      <mt-header
+        title=""
+        fixed
+        v-if="isShowingSetting"
+      >
+        <mt-button
+          icon="back"
+          slot="left"
+          @click="back"
+        ></mt-button>
+      </mt-header>
+      <div
+        class="fullHeight"
+        ref="chapterContent"
+      ></div>
+    </div>
   </div>
 </template>
 <script src="./detail.js">

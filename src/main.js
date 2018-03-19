@@ -4,6 +4,7 @@ import _ from 'lodash';
 import Mint from 'mint-ui';
 import VuexRouterSync from 'vuex-router-sync';
 import 'mint-ui/lib/style.css';
+import localforage from 'localforage';
 
 import './assets/iconfont/iconfont.css';
 import App from './App.vue';
@@ -55,6 +56,17 @@ Vue.prototype.$loading = (timeout = 10000) => {
   setTimeout(resolve, timeout);
   return resolve;
 };
+
+Vue.prototype.$next = function nextTickPromise() {
+  return new Promise(resolve => this.$nextTick(resolve));
+};
+
+localforage.config({
+  name: 'saturn',
+  version: 1.0,
+  storeName: 'novel',
+  description: 'novel database',
+});
 
 new Vue({
   router,

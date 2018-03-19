@@ -1,5 +1,6 @@
 import request from 'axios';
 import _ from 'lodash';
+import localforage from 'localforage';
 import {
   BOOKS,
   BOOKS_SOURCES,
@@ -7,6 +8,7 @@ import {
   BOOKS_INFO,
   BOOKS_DETAIL,
   BOOKS_CATEGORIES,
+  BOOKS_CHAPTERS,
 } from '../../urls';
 import {
   BOOK_HOT_LIST,
@@ -55,7 +57,7 @@ const mutations = {
 
 // 获取热门书籍列表
 const bookHotList = async ({commit}, page) => {
-  const limit = 10;
+  const limit = 20;
   const skip = limit * page;
   if (state.hotList[skip + limit]) {
     return;
@@ -164,6 +166,64 @@ const bookGetDetail = async (tmp, no) => {
   return item;
 };
 
+// 获取书籍章节
+const bookChapterList = async (tmp, {no, limit = 10, fields, skip = 0}) => {
+  const res = await request.get(BOOKS_CHAPTERS.replace(':no', no), {
+    params: {
+      fields,
+      limit,
+      skip,
+    },
+  });
+  return _.get(res, 'data.list', []);
+};
+
+// 获取书籍章节内容
+const bookChapterDetail = async (tmp, {no, chapterNo}) => {
+  const key = `chapter-${no}-${chapterNo}`;
+  const data = await localforage.getItem(key);
+  if (data) {
+    return data;
+  }
+  const limit = 5;
+  const start = Math.floor(chapterNo / limit) * limit;
+  const offset = chapterNo - start;
+  const res = await request.get(BOOKS_CHAPTERS.replace(':no', no), {
+    params: {
+      fields: 'data title',
+      limit,
+      skip: start,
+    },
+  });
+  const list = _.get(res, 'data.list');
+  if (!list || !list[offset]) {
+    throw new Error('获取数据失败');
+  }
+  _.defer(() => {
+    const createdAt = new Date().toISOString();
+    const fns = _.map(list, (item, index) => {
+      const itemKey = `chapter-${no}-${start + index}`;
+      return localforage.setItem(itemKey, {
+        createdAt,
+        title: item.title,
+        content: item.data,
+      });
+    });
+    Promise.all(fns)
+      .then(() => {
+        console.info('save chapters success');
+      })
+      .catch(err => {
+        console.error(`save chapter fail, ${err.message}`);
+      });
+  });
+  const result = list[offset];
+  return {
+    title: result.title,
+    content: result.data,
+  };
+};
+
 export const actions = {
   bookHotList,
   bookAddSource,
@@ -175,6 +235,8 @@ export const actions = {
   bookListByCategory,
   bookSearch,
   bookGetDetail,
+  bookChapterList,
+  bookChapterDetail,
 };
 
 export default {

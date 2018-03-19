@@ -20,13 +20,13 @@ export function getErrorMessage(err) {
   return message;
 }
 
-export const genPassword = (account, password) => {
+export function genPassword(account, password) {
   const pwd = sha256(password);
   const app = APP || 'unknown';
   return sha256(`${account}-${pwd}-${app}`);
-};
+}
 
-export const getDate = str => {
+export function getDate(str) {
   const date = new Date(str);
   const fill = v => {
     if (v >= 10) {
@@ -40,4 +40,30 @@ export const getDate = str => {
   const mintues = fill(date.getMinutes());
   const seconds = fill(date.getSeconds());
   return `${date.getFullYear()}-${month}-${day} ${hours}:${mintues}:${seconds}`;
-};
+}
+
+export function getDefaultColors(type) {
+  const colors = {
+    gray: {
+      backgroundColor: '#d4d4d4',
+      color: '#232323',
+      boxShadow: '3px 4px 4px rgba(125, 123, 116, 0.8)',
+    },
+    yellow: {
+      backgroundColor: '#a89c84',
+      color: '#4e3c26',
+      boxShadow: '3px 4px 4px rgba(125, 123, 116, 0.8)',
+    },
+    black: {
+      backgroundColor: '#11100e',
+      color: '#2d2c2b',
+      boxShadow: '2px 3px 4px rgba(60, 60, 60, 0.8)',
+    },
+    pinky: {
+      backgroundColor: '#494446',
+      color: '#2b0c12',
+      boxShadow: '2px 3px 4px rgba(60, 60, 60, 0.8)',
+    },
+  };
+  return colors[type];
+}
