@@ -1,6 +1,7 @@
 <template>
   <div class="fullHeight">
     <mt-header
+      class="mainHeader"
       :title="title"
       fixed
       v-if="mode !== 2"
@@ -22,7 +23,10 @@
         href="javascript:;"
         class="read"
         @click="goOnReading"
-      >免费阅读</a>
+      >
+        <span v-if="!currentReadInfo">免费阅读</span>
+        <span v-else>继续阅读</span>
+      </a>
       <a
         href="javascript:;"
       >加入书架</a>
@@ -38,6 +42,7 @@
           class="clearfix"
           :style="{
             padding: '15px',
+            height: '160px',
           }"
         >
           <image-view

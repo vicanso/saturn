@@ -1,10 +1,9 @@
 @import "../../variables"
 $functionHeight: 50px
 $imageViewWidth: 100px
-$headerHeight: 40px
 
 .bookView
-  padding-top: $headerHeight
+  padding-top: $MAIN_NAV_HEIGHT
   padding-bottom: $functionHeight
   .infoView
     background-color: $COLOR_WHITE
@@ -57,6 +56,8 @@ $headerHeight: 40px
       color: $COLOR_WHITE
 
 .chaptersView
-  padding-top: $headerHeight
-  .chapter:nth-child(even)
-    background-color: $COLOR_DARY_WHITE
+  padding-top: $MAIN_NAV_HEIGHT
+  .chapter
+    min-height: 40px
+    &:nth-child(even)
+      background-color: $COLOR_DARY_WHITE

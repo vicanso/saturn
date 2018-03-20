@@ -37,6 +37,13 @@
             @click.native="showDetail(item.no)"
           ></BookView>
         </li>
+        <intersection
+          :style="{
+            height: '3px',
+          }"
+          v-on:intersection="loadMoreHotBooks"
+        >
+        </intersection>
       </ul>
     </div>
     <!-- 精选 END -->

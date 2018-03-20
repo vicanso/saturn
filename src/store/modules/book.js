@@ -57,7 +57,7 @@ const mutations = {
 
 // 获取热门书籍列表
 const bookHotList = async ({commit}, page) => {
-  const limit = 20;
+  const limit = 10;
   const skip = limit * page;
   if (state.hotList[skip + limit]) {
     return;
@@ -66,11 +66,13 @@ const bookHotList = async ({commit}, page) => {
     limit,
     skip,
     fields: 'author name no brief wordCount category',
+    sort: '-latestChapter.updatedAt',
   };
   const res = await request.get(BOOKS, {
     params,
   });
   commit(BOOK_HOT_LIST, res.data.list);
+  return res.data;
 };
 
 // 增加书籍来源
@@ -178,6 +180,18 @@ const bookChapterList = async (tmp, {no, limit = 10, fields, skip = 0}) => {
   return _.get(res, 'data.list', []);
 };
 
+// 获取书籍阅读信息
+const bookGetReadInfo = async (tmp, no) => {
+  const key = `read-${no}`;
+  const data = await localforage.getItem(key);
+  return data;
+};
+
+const bookSaveReadInfo = async (tmp, {no, data}) => {
+  const key = `read-${no}`;
+  await localforage.setItem(key, data);
+};
+
 // 获取书籍章节内容
 const bookChapterDetail = async (tmp, {no, chapterNo}) => {
   const key = `chapter-${no}-${chapterNo}`;
@@ -237,6 +251,8 @@ export const actions = {
   bookGetDetail,
   bookChapterList,
   bookChapterDetail,
+  bookSaveReadInfo,
+  bookGetReadInfo,
 };
 
 export default {

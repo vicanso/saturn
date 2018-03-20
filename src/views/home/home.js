@@ -13,7 +13,8 @@ export default {
       keyword: '',
       selected: 'hot',
       selectedCategory: 0,
-      page: 0,
+      categorPage: 0,
+      hotPage: 0,
       searchBooks: null,
       items: [
         {
@@ -86,21 +87,21 @@ export default {
     },
     // 切换分类
     changeCategory(index) {
-      this.page = 0;
+      this.categorPage = 0;
       this.selectedCategory = index;
       this.listByCategory();
     },
     // 加载更多
     loadMoreByCategory(status) {
       if (status === 1) {
-        this.page = this.page + 1;
+        this.categorPage = this.categorPage + 1;
         this.listByCategory();
       }
     },
     // 按分类查询
     async listByCategory() {
       const {
-        page,
+        categorPage,
         selectedCategory,
         categoryList,
         loadingByCategory,
@@ -113,7 +114,7 @@ export default {
         return;
       }
       // 如果page为0表示新的分类
-      if (page != 0 && categoryBooks.done) {
+      if (categorPage != 0 && categoryBooks.done) {
         return;
       }
 
@@ -122,12 +123,33 @@ export default {
       try {
         await this.bookListByCategory({
           category: category.name,
-          page,
+          page: categorPage,
         });
       } catch (err) {
         this.$toast(err);
       } finally {
         this.loadingByCategory = false;
+      }
+    },
+    // 加载更多的热门书籍
+    async loadMoreHotBooks() {
+      if (this.loadingHotBooks || this.loadHotBooksDone) {
+        return;
+      }
+      this.loadingHotBooks = true;
+      try {
+        const data = await this.bookHotList(this.hotPage);
+        this.hotPage += 1;
+        // 如果已经到最底
+        if (data && data.list.length === 0) {
+          this.loadHotBooksDone = true;
+        }
+      } catch (err) {
+        this.$toast(err);
+      } finally {
+        _.delay(() => {
+          this.loadingHotBooks = false;
+        }, 1000);
       }
     },
   },
@@ -137,7 +159,7 @@ export default {
     }, 1000);
     const close = this.$loading();
     try {
-      await this.bookHotList(0);
+      await this.loadMoreHotBooks();
     } catch (err) {
       this.$toast(err);
     } finally {

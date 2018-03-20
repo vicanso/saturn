@@ -12,17 +12,24 @@ export default {
   },
   data() {
     return {
-      mode: 0,
+      mode: -1,
       book: null,
       title: '...',
       updatedAt: '',
       chapters: null,
       content: '',
       isShowingSetting: false,
+      currentReadInfo: null,
     };
   },
   methods: {
-    ...mapActions(['bookGetDetail', 'bookChapterList', 'bookChapterDetail']),
+    ...mapActions([
+      'bookGetDetail',
+      'bookChapterList',
+      'bookChapterDetail',
+      'bookGetReadInfo',
+      'bookSaveReadInfo',
+    ]),
     back() {
       const {mode} = this;
       if (mode !== 0) {
@@ -32,21 +39,25 @@ export default {
       this.$router.back();
     },
     getSetting() {
+      const dom = this.$refs.chapterContent;
+      const width = dom.clientWidth;
       return _.extend(
         {
+          width,
+          height: dom.clientHeight,
           padding: 20,
-          fontSize: 16,
+          fontSize: 20,
+          maxWidth: width + 10,
         },
         getDefaultColors('yellow'),
       );
     },
     getFontMetrics() {
       if (!this.fontMetrics) {
-        const dom = this.$refs.chapterContent;
-        const {padding, fontSize, color} = this.getSetting();
+        const {padding, fontSize, color, width, height} = this.getSetting();
         this.fontMetrics = new FontMetrics({
-          width: dom.clientWidth - 2 * padding,
-          height: dom.clientHeight - 2 * padding,
+          width: width - 2 * padding,
+          height: height - 2 * padding,
           fontSize,
           format: 'html',
           color,
@@ -54,12 +65,18 @@ export default {
       }
       return this.fontMetrics;
     },
-    showChapter(content) {
+    showChapter(content, showLastPage) {
       const {title, chapterNo} = this.currentReadInfo;
       const dom = this.$refs.chapterContent;
       const fontMetrics = this.getFontMetrics();
       const result = fontMetrics.getFillTextList(content);
-      const {padding, backgroundColor, color, boxShadow} = this.getSetting();
+      const {
+        padding,
+        backgroundColor,
+        color,
+        boxShadow,
+        maxWidth,
+      } = this.getSetting();
       const chapterCount = this.book.chapterCount;
       const style = `position:absolute;
         left:0;
@@ -95,7 +112,6 @@ export default {
           style="${style};z-index:${max - index}"
         >${header}${item.html}${footer}</div>`;
       });
-      const maxWidth = dom.clientWidth + 10;
       const transform = `translate3d(${-maxWidth}px, 0px, 0px)`;
       const loadingHtml = `
         <div style="${style};z-index:${max + 1};transform:${transform}">
@@ -103,13 +119,26 @@ export default {
       `;
       dom.style.backgroundColor = backgroundColor;
       dom.innerHTML = loadingHtml + htmls.join('');
-      // 设置为显示每一页
-      this.currentChapter = {
-        maxPage: max,
-        page: 0,
-      };
+      if (showLastPage) {
+        _.forEach(dom.children, (item, index) => {
+          if (index !== max) {
+            item.style.transform = transform;
+          }
+        });
+        // 设置为显示最后一页
+        this.currentChapter = {
+          maxPage: max,
+          page: max - 1,
+        };
+      } else {
+        // 设置为显示每一页
+        this.currentChapter = {
+          maxPage: max,
+          page: 0,
+        };
+      }
     },
-    async read(chapterNo) {
+    async read(chapterNo, showLastPage) {
       const {no} = this.$route.params;
       const close = this.$loading();
       try {
@@ -126,7 +155,11 @@ export default {
           chapterNo,
           title: data.title,
         };
-        this.showChapter(data.content);
+        this.bookSaveReadInfo({
+          no,
+          data: this.currentReadInfo,
+        });
+        this.showChapter(data.content, showLastPage);
       } catch (err) {
         this.$toast(err);
       } finally {
@@ -134,15 +167,16 @@ export default {
       }
     },
     goOnReading() {
-      this.read(0);
+      const chapterNo = _.get(this.currentReadInfo, 'chapterNo', 0);
+      this.read(chapterNo);
     },
     initPenEvent() {
       if (this.hammer) {
         this.hammer.destroy();
       }
+      const {maxWidth} = this.getSetting();
       const threshold = 10;
       const dom = this.$refs.chapterContent;
-      const maxWidth = dom.clientWidth + 10;
       const hammer = new Hammer(dom, {
         direction: Hammer.DIRECTION_HORIZONTAL,
         threshold,
@@ -190,15 +224,18 @@ export default {
             }
 
             item.style.transition = transition;
-            // if (currentPage <= 0 && currentReadInfo.index === 0) {
-            //   item.style.transform = `translate3d(${-maxWidth}px, 0px, 0px)`;
-            //   this.$toast('已至第一页');
-            //   return;
-            // }
             item.style.transform = `translate3d(${transX}px, 0px, 0px)`;
-            this.currentChapter.page = currentPage;
-            if (currentPage >= this.currentChapter.maxPage) {
-              this.read(this.currentReadInfo.chapterNo + 1);
+            const {currentChapter, currentReadInfo} = this;
+            currentChapter.page = currentPage;
+            if (currentPage <= 0) {
+              if (currentReadInfo.chapterNo === 0) {
+                this.$toast('已至第一页');
+              } else {
+                // 切换至上一章的时候，需要显示最后一页
+                this.read(currentReadInfo.chapterNo - 1, true);
+              }
+            } else if (currentPage >= currentChapter.maxPage) {
+              this.read(currentReadInfo.chapterNo + 1);
             }
             break;
           }
@@ -250,9 +287,11 @@ export default {
       this.title = name;
       if (latestChapter) {
         const date = getDate(latestChapter.updatedAt);
-        this.updatedAt = date.substring(11, 16);
+        this.updatedAt = date.substring(5, 16);
       }
       this.book = data;
+      this.currentReadInfo = await this.bookGetReadInfo(no);
+      this.mode = 0;
     } catch (err) {
       this.$toast(err);
     } finally {
