@@ -3,12 +3,14 @@ import _ from 'lodash';
 import Hammer from 'hammerjs';
 
 import ImageView from '../../components/ImageView';
-import {getDate, getDefaultColors} from '../../helpers/util';
+import Loading from '../../components/Loading';
+import {getDate, getDefaultColors, waitFor} from '../../helpers/util';
 import FontMetrics from 'web-font-metrics';
 
 export default {
   components: {
     ImageView,
+    Loading,
   },
   data() {
     return {
@@ -20,6 +22,7 @@ export default {
       content: '',
       isShowingSetting: false,
       currentReadInfo: null,
+      showReload: false,
     };
   },
   methods: {
@@ -47,6 +50,7 @@ export default {
           height: dom.clientHeight,
           padding: 20,
           fontSize: 20,
+          lineHeight: 32,
           maxWidth: width + 10,
         },
         getDefaultColors('yellow'),
@@ -54,10 +58,18 @@ export default {
     },
     getFontMetrics() {
       if (!this.fontMetrics) {
-        const {padding, fontSize, color, width, height} = this.getSetting();
+        const {
+          padding,
+          fontSize,
+          color,
+          width,
+          height,
+          lineHeight,
+        } = this.getSetting();
         this.fontMetrics = new FontMetrics({
           width: width - 2 * padding,
           height: height - 2 * padding,
+          lineHeight,
           fontSize,
           format: 'html',
           color,
@@ -141,7 +153,9 @@ export default {
     async read(chapterNo, showLastPage) {
       const {no} = this.$route.params;
       const close = this.$loading();
+      this.showReload = false;
       try {
+        const startedAt = Date.now();
         const data = await this.bookChapterDetail({
           no,
           chapterNo,
@@ -151,6 +165,7 @@ export default {
           await this.$next();
           this.initPenEvent();
         }
+        await waitFor(300, startedAt);
         this.currentReadInfo = {
           chapterNo,
           title: data.title,
@@ -161,6 +176,7 @@ export default {
         });
         this.showChapter(data.content, showLastPage);
       } catch (err) {
+        this.showReload = true;
         this.$toast(err);
       } finally {
         close();
@@ -169,6 +185,10 @@ export default {
     goOnReading() {
       const chapterNo = _.get(this.currentReadInfo, 'chapterNo', 0);
       this.read(chapterNo);
+    },
+    loadNextChapter() {
+      const chapterNo = _.get(this.currentReadInfo, 'chapterNo', 0);
+      this.read(chapterNo + 1);
     },
     initPenEvent() {
       if (this.hammer) {
@@ -251,7 +271,7 @@ export default {
   watch: {
     async mode(v) {
       if (v === 1) {
-        if (this.chapterData) {
+        if (this.chapters) {
           return;
         }
         const {no} = this.$route.params;

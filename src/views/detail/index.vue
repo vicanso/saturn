@@ -84,10 +84,9 @@
       v-if="mode === 1"
       class="chaptersView fullHeight"
     >
-      <p
-        class="tac"
+      <loading
         v-if="!chapters"
-      >正在加载中，请稍候...</p>
+      />
       <div
         v-else
         class="fullHeightScroll"
@@ -120,6 +119,22 @@
         class="fullHeight"
         ref="chapterContent"
       ></div>
+      <div
+        v-if="showReload"
+        class="centerFixed"
+        :style="{
+          zIndex: 99,
+          width: '150px',
+          marginLeft: '-75px',
+          marginTop: '-25px',
+        }"
+      >
+        <mt-button
+          type="primary"
+          size="large"
+          @click.native="loadNextChapter"
+        >重新加载</mt-button>
+      </div>
     </div>
   </div>
 </template>
