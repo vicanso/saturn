@@ -278,7 +278,7 @@ export default {
   },
   watch: {
     async mode(v, prevMode) {
-      const {steps, chapters, $refs, backTrigger, book, $route} = this;
+      const {steps, chapters, backTrigger, book, $route} = this;
       // 如果是返回导致的，不记录
       // 第一次也不记录
       if (!backTrigger && prevMode !== -1) {

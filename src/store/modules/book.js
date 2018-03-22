@@ -225,9 +225,11 @@ const bookChapterDetail = async (tmp, {no, chapterNo}) => {
     });
     Promise.all(fns)
       .then(() => {
+        // eslint-disable-next-line
         console.info('save chapters success');
       })
       .catch(err => {
+        // eslint-disable-next-line
         console.error(`save chapter fail, ${err.message}`);
       });
   });
