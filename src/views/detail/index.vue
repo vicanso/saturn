@@ -4,7 +4,7 @@
       class="mainHeader"
       :title="title"
       fixed
-      v-if="mode !== 2"
+      v-show="mode !== 2"
     >
       <mt-button
         icon="back"
@@ -14,7 +14,7 @@
     </mt-header>
     <div
       class="functionView"
-      v-if="mode === 0"
+      v-show="mode === 0"
     >
       <a
         href="javascript:;"
@@ -32,11 +32,12 @@
       >加入书架</a>
     </div>
     <div
-      v-if="book && mode === 0"
+      v-show="mode === 0"
       class="bookView fullHeight"
     ><div class="fullHeightScroll">
       <div
         class="infoView"
+        v-if="book"
       >
         <div
           class="clearfix"
@@ -81,7 +82,7 @@
       </div>
     </div></div>
     <div
-      v-if="mode === 1"
+      v-show="mode === 1"
       class="chaptersView fullHeight"
     >
       <loading
@@ -101,12 +102,13 @@
       </div>
     </div>
     <div
-      v-if="mode === 2"
+      v-show="mode === 2"
       class="fullHeight"
     >
       <mt-header
         title=""
         fixed
+        class="settingHeader"
         v-if="isShowingSetting"
       >
         <mt-button
@@ -114,6 +116,20 @@
           slot="left"
           @click="back"
         ></mt-button>
+        <mt-button
+          slot="right"
+          class="mright20"
+        >
+          <i class="iconfont icon-light"></i>
+          夜间
+        </mt-button>
+        <mt-button
+          slot="right"
+          @click.native="mode = 1"
+        >
+          <i class="iconfont icon-category"></i>
+          章节
+        </mt-button>
       </mt-header>
       <div
         class="fullHeight"

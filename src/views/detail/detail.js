@@ -34,12 +34,15 @@ export default {
       'bookSaveReadInfo',
     ]),
     back() {
-      const {mode} = this;
-      if (mode !== 0) {
-        this.mode = 0;
+      const {steps, $router} = this;
+      this.isShowingSetting = false;
+      if (steps.length === 0) {
+        $router.back();
         return;
       }
-      this.$router.back();
+      const step = steps.pop();
+      this.backTrigger = true;
+      this.mode = step;
     },
     getSetting() {
       const dom = this.$refs.chapterContent;
@@ -205,6 +208,11 @@ export default {
       const transition = '0.4s transform';
       hammer.on('pan panend panstart tap', e => {
         const {type, deltaX} = e;
+        if (type === 'tap') {
+          const {isShowingSetting} = this;
+          this.isShowingSetting = !isShowingSetting;
+          return;
+        }
         let currentPage = this.currentChapter.page;
         const children = dom.children;
         let index = 0;
@@ -247,7 +255,7 @@ export default {
             item.style.transform = `translate3d(${transX}px, 0px, 0px)`;
             const {currentChapter, currentReadInfo} = this;
             currentChapter.page = currentPage;
-            if (currentPage <= 0) {
+            if (currentPage < 0) {
               if (currentReadInfo.chapterNo === 0) {
                 this.$toast('已至第一页');
               } else {
@@ -269,13 +277,20 @@ export default {
     },
   },
   watch: {
-    async mode(v) {
+    async mode(v, prevMode) {
+      const {steps, chapters, $refs, backTrigger, book, $route} = this;
+      // 如果是返回导致的，不记录
+      // 第一次也不记录
+      if (!backTrigger && prevMode !== -1) {
+        steps.push(prevMode);
+      }
+      this.backTrigger = false;
       if (v === 1) {
-        if (this.chapters) {
+        if (chapters) {
           return;
         }
-        const {no} = this.$route.params;
-        const max = this.book.latestChapter.no + 1;
+        const {no} = $route.params;
+        const max = book.latestChapter.no + 1;
         const limit = 100;
         const count = Math.ceil(max / limit);
         const fns = [];
@@ -301,6 +316,7 @@ export default {
   async beforeMount() {
     const close = this.$loading();
     const {no} = this.$route.params;
+    this.steps = [];
     try {
       const data = await this.bookGetDetail(no);
       const {name, latestChapter} = data;
