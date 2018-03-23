@@ -22,7 +22,7 @@
       <a
         href="javascript:;"
         class="read"
-        @click="goOnReading"
+        @click="changeChapter(0)"
       >
         <span v-if="!currentReadInfo">免费阅读</span>
         <span v-else>继续阅读</span>
@@ -31,6 +31,7 @@
         href="javascript:;"
       >加入书架</a>
     </div>
+    <!-- 书籍详情 BEGIN -->
     <div
       v-show="mode === 0"
       class="bookView fullHeight"
@@ -81,6 +82,9 @@
         </div>
       </div>
     </div></div>
+    <!-- 书籍详情 END -->
+
+    <!-- 书籍章节列表 BEGIN -->
     <div
       v-show="mode === 1"
       class="chaptersView fullHeight"
@@ -101,10 +105,13 @@
         ></mt-cell>
       </div>
     </div>
+    <!-- 书籍章节列表 END -->
+
     <div
       v-show="mode === 2"
       class="fullHeight"
     >
+      <!-- 顶部功能设置 BEGIN -->
       <mt-header
         title=""
         fixed
@@ -119,6 +126,7 @@
         <mt-button
           slot="right"
           class="mright20"
+          @click.native="toggleNightTheme"
         >
           <i class="iconfont icon-light"></i>
           夜间
@@ -131,6 +139,49 @@
           章节
         </mt-button>
       </mt-header>
+      <!-- 顶部功能设置 END -->
+
+
+      <!-- 底部功能设置 BEGIN -->
+      <div
+        class="settingFooter"
+        v-if="isShowingSetting"
+      >
+        <div
+          class="fontSize"
+        >
+          <span
+            @click="changeFontSize(-1)"
+          >T-</span> 
+          <span>{{userSetting.fontSize}}</span>
+          <span
+            @click="changeFontSize(1)"
+          >T+</span>
+        </div>
+        <div
+          class="theme"
+        >
+          <div
+            v-for="theme in themes"
+            :key="theme.name"
+            @click="changeTheme(theme.name)"
+          ><span
+            :style="{
+              backgroundColor: theme.backgroundColor,
+            }"
+          >
+            <i
+              class="iconfont icon-selected"
+              :class="{
+                active: theme.name === userSetting.theme,
+              }"
+            ></i>
+          </span></div>
+        </div>
+      </div>
+      <!-- 底部功能设置 END -->
+
+
       <div
         class="fullHeight"
         ref="chapterContent"
@@ -148,10 +199,11 @@
         <mt-button
           type="primary"
           size="large"
-          @click.native="loadNextChapter"
+          @click.native="changeChapter(1)"
         >重新加载</mt-button>
       </div>
     </div>
+
   </div>
 </template>
 <script src="./detail.js">

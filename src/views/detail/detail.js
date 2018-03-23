@@ -1,4 +1,4 @@
-import {mapActions} from 'vuex';
+import {mapActions, mapState} from 'vuex';
 import _ from 'lodash';
 import Hammer from 'hammerjs';
 
@@ -7,12 +7,21 @@ import Loading from '../../components/Loading';
 import {getDate, getDefaultColors, waitFor} from '../../helpers/util';
 import FontMetrics from 'web-font-metrics';
 
+const colors = getDefaultColors();
+
 export default {
   components: {
     ImageView,
     Loading,
   },
   data() {
+    const themes = _.map(colors, (v, k) => {
+      const {backgroundColor} = v;
+      return {
+        backgroundColor,
+        name: k,
+      };
+    });
     return {
       mode: -1,
       book: null,
@@ -23,7 +32,13 @@ export default {
       isShowingSetting: false,
       currentReadInfo: null,
       showReload: false,
+      themes,
     };
+  },
+  computed: {
+    ...mapState({
+      userSetting: ({user}) => user.setting,
+    }),
   },
   methods: {
     ...mapActions([
@@ -32,6 +47,7 @@ export default {
       'bookChapterDetail',
       'bookGetReadInfo',
       'bookSaveReadInfo',
+      'userSaveSetting',
     ]),
     back() {
       const {steps, $router} = this;
@@ -45,19 +61,68 @@ export default {
       this.mode = step;
     },
     getSetting() {
-      const dom = this.$refs.chapterContent;
+      const {userSetting, $refs} = this;
+      const dom = $refs.chapterContent;
       const width = dom.clientWidth;
       return _.extend(
         {
           width,
           height: dom.clientHeight,
           padding: 20,
-          fontSize: 20,
-          lineHeight: 32,
+          fontSize: userSetting.fontSize,
           maxWidth: width + 10,
         },
-        getDefaultColors('yellow'),
+        colors[userSetting.theme],
       );
+    },
+    async changeFontSize(offset) {
+      const {userSetting} = this;
+      const fontSize = userSetting.fontSize + offset;
+      const minFontSize = 16;
+      const maxFontSize = 28;
+      if (fontSize < minFontSize || fontSize > maxFontSize) {
+        this.$toast(`字体大小须设置为${minFontSize}至${maxFontSize}之间`);
+        return;
+      }
+      try {
+        await this.userSaveSetting({
+          fontSize,
+        });
+        // 字体有调整需要重置 font metrics
+        this.fontMetrics = null;
+        this.changeChapter(0);
+      } catch (err) {
+        this.$toast(err);
+      }
+    },
+    async changeTheme(theme) {
+      try {
+        await this.userSaveSetting({
+          theme,
+        });
+        this.changeChapter(0);
+      } catch (err) {
+        this.$toast(err);
+      }
+    },
+    async toggleNightTheme() {
+      const {userSetting} = this;
+      let theme = 'black';
+      let nightMode = true;
+      if (userSetting.nightMode) {
+        theme = userSetting.prevTheme;
+        nightMode = false;
+      }
+      try {
+        await this.userSaveSetting({
+          theme,
+          nightMode,
+          prevTheme: userSetting.theme,
+        });
+        this.changeChapter(0);
+      } catch (err) {
+        this.$toast(err);
+      }
     },
     getFontMetrics() {
       if (!this.fontMetrics) {
@@ -180,18 +245,23 @@ export default {
         this.showChapter(data.content, showLastPage);
       } catch (err) {
         this.showReload = true;
-        this.$toast(err);
+        // 超时的出错不提示
+        if (err.code !== 'ECONNABORTED') {
+          this.$toast(err);
+        }
       } finally {
         close();
       }
     },
-    goOnReading() {
-      const chapterNo = _.get(this.currentReadInfo, 'chapterNo', 0);
-      this.read(chapterNo);
-    },
-    loadNextChapter() {
-      const chapterNo = _.get(this.currentReadInfo, 'chapterNo', 0);
-      this.read(chapterNo + 1);
+    changeChapter(offset, isBack) {
+      const {currentReadInfo} = this;
+      let chapterNo = _.get(currentReadInfo, 'chapterNo', 0);
+      chapterNo += offset;
+      if (chapterNo < 0) {
+        this.$toast('已至第一页');
+        return;
+      }
+      this.read(chapterNo, isBack);
     },
     initPenEvent() {
       if (this.hammer) {
@@ -206,15 +276,42 @@ export default {
       });
       let moveType = '';
       const transition = '0.4s transform';
+      const changePage = (item, currentPage, transX) => {
+        item.style.transition = transition;
+        item.style.transform = `translate3d(${transX}px, 0px, 0px)`;
+        const {currentChapter, currentReadInfo} = this;
+        currentChapter.page = currentPage;
+        if (currentPage < 0) {
+          if (currentReadInfo.chapterNo === 0) {
+            this.$toast('已至第一页');
+          } else {
+            // 切换至上一章的时候，需要显示最后一页
+            this.changeChapter(-1, true);
+          }
+        } else if (currentPage >= currentChapter.maxPage) {
+          this.changeChapter(1);
+        }
+      };
       hammer.on('pan panend panstart tap', e => {
-        const {type, deltaX} = e;
+        const {type, deltaX, center} = e;
+        let currentPage = this.currentChapter.page;
+        const children = dom.children;
         if (type === 'tap') {
+          const x = center.x;
+          // 上一页
+          if (x < 0.35 * maxWidth) {
+            changePage(children[currentPage], currentPage - 1, 0);
+            return;
+          }
+          // 下一页
+          if (x > 0.7 * maxWidth) {
+            changePage(children[currentPage + 1], currentPage + 1, -maxWidth);
+            return;
+          }
           const {isShowingSetting} = this;
           this.isShowingSetting = !isShowingSetting;
           return;
         }
-        let currentPage = this.currentChapter.page;
-        const children = dom.children;
         let index = 0;
         let offset = deltaX;
         if (type === 'panstart') {
@@ -250,21 +347,21 @@ export default {
               transX = -maxWidth;
               currentPage += 1;
             }
-
-            item.style.transition = transition;
-            item.style.transform = `translate3d(${transX}px, 0px, 0px)`;
-            const {currentChapter, currentReadInfo} = this;
-            currentChapter.page = currentPage;
-            if (currentPage < 0) {
-              if (currentReadInfo.chapterNo === 0) {
-                this.$toast('已至第一页');
-              } else {
-                // 切换至上一章的时候，需要显示最后一页
-                this.read(currentReadInfo.chapterNo - 1, true);
-              }
-            } else if (currentPage >= currentChapter.maxPage) {
-              this.read(currentReadInfo.chapterNo + 1);
-            }
+            changePage(item, currentPage, transX);
+            // item.style.transition = transition;
+            // item.style.transform = `translate3d(${transX}px, 0px, 0px)`;
+            // const {currentChapter, currentReadInfo} = this;
+            // currentChapter.page = currentPage;
+            // if (currentPage < 0) {
+            //   if (currentReadInfo.chapterNo === 0) {
+            //     this.$toast('已至第一页');
+            //   } else {
+            //     // 切换至上一章的时候，需要显示最后一页
+            //     this.changeChapter(-1, true);
+            //   }
+            // } else if (currentPage >= currentChapter.maxPage) {
+            //   this.changeChapter(1);
+            // }
             break;
           }
           default:

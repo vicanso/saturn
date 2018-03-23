@@ -28,6 +28,8 @@ const genCover = item => {
   // eslint-disable-next-line
   item.cover = URL_PREFIX + BOOKS_COVER.replace(':no', item.no);
 };
+const chapterKeyPrefix = 'book-chapter-';
+const readKeyPrefix = 'book-read-';
 
 const mutations = {
   [BOOK_HOT_LIST](state, data) {
@@ -182,19 +184,46 @@ const bookChapterList = async (tmp, {no, limit = 10, fields, skip = 0}) => {
 
 // 获取书籍阅读信息
 const bookGetReadInfo = async (tmp, no) => {
-  const key = `read-${no}`;
+  const key = `${readKeyPrefix}${no}`;
   const data = await localforage.getItem(key);
   return data;
 };
-
+// 保存阅读信息
 const bookSaveReadInfo = async (tmp, {no, data}) => {
-  const key = `read-${no}`;
-  await localforage.setItem(key, data);
+  const key = `${readKeyPrefix}${no}`;
+  await localforage.setItem(
+    key,
+    _.extend(
+      {
+        createdAt: new Date().toISOString(),
+      },
+      data,
+    ),
+  );
+};
+
+// 清除过期的章节数据
+const clearExpiredChapters = async () => {
+  const oneWeek = 7 * 24 * 3600 * 1000;
+  const expiredDate = new Date(Date.now() - oneWeek).toISOString();
+  localforage.iterate((value, key) => {
+    // 非chapter的数据不处理
+    if (key.indexOf(chapterKeyPrefix) !== 0) {
+      return;
+    }
+    // 未过期的数据不处理
+    if (value.createdAt > expiredDate) {
+      return;
+    }
+    localforage.removeItem(key).catch(err => {
+      console.error(`localforage remove ${key} fail, ${err.message}`);
+    });
+  });
 };
 
 // 获取书籍章节内容
 const bookChapterDetail = async (tmp, {no, chapterNo}) => {
-  const key = `chapter-${no}-${chapterNo}`;
+  const key = `${chapterKeyPrefix}${no}-${chapterNo}`;
   const data = await localforage.getItem(key);
   if (data) {
     return data;
@@ -216,7 +245,7 @@ const bookChapterDetail = async (tmp, {no, chapterNo}) => {
   _.defer(() => {
     const createdAt = new Date().toISOString();
     const fns = _.map(list, (item, index) => {
-      const itemKey = `chapter-${no}-${start + index}`;
+      const itemKey = `${chapterKeyPrefix}${no}-${start + index}`;
       return localforage.setItem(itemKey, {
         createdAt,
         title: item.title,
@@ -232,6 +261,9 @@ const bookChapterDetail = async (tmp, {no, chapterNo}) => {
         // eslint-disable-next-line
         console.error(`save chapter fail, ${err.message}`);
       });
+    clearExpiredChapters().catch(err => {
+      console.error(`clear expired chapters fail, ${err.message}`);
+    });
   });
   const result = list[offset];
   return {

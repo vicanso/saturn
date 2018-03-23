@@ -20,7 +20,7 @@ export default {
     Home,
   },
   methods: {
-    ...mapActions(['userGetInfo']),
+    ...mapActions(['userGetInfo', 'userGetSetting']),
   },
   data() {
     return {};
@@ -29,6 +29,7 @@ export default {
     const close = this.$loading();
     try {
       await this.userGetInfo();
+      await this.userGetSetting();
     } catch (err) {
       this.$toast(err);
     } finally {

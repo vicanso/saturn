@@ -62,8 +62,42 @@ $imageViewWidth: 100px
     &:nth-child(even)
       background-color: $COLOR_DARY_WHITE
 
-.settingHeader
+.settingHeader, .settingFooter
   background-color: rgba($COLOR_DARY_WHITE, 0.9)
   color: $COLOR_BLUE
-  height: $MAIN_HEADER_HEIGHT
   z-index: 99
+
+.settingHeader
+  height: $MAIN_HEADER_HEIGHT
+
+.settingFooter
+  position: fixed
+  left: 0
+  bottom: 0
+  right: 0
+  .fontSize
+    line-height: 48px
+    span
+      text-align: center
+      display: inline-block
+      width: 30%
+      &:nth-child(2)
+        width: 40%
+  .theme
+    border-top: $GRAY_BORDER
+    margin: 0 5px 
+    padding-top: 5px
+    div 
+      display: inline-block
+      width: 25%
+    span
+      display: block
+      margin: 5px
+      height: 40px
+      line-height: 40px
+      text-align: center
+      i
+        font-size: 32px
+        visibility: hidden
+        &.active
+          visibility: visible

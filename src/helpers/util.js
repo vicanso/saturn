@@ -46,7 +46,7 @@ export function getDate(str) {
 }
 
 // 获取默认的颜色配置
-export function getDefaultColors(type) {
+export function getDefaultColors() {
   const colors = {
     gray: {
       backgroundColor: '#d4d4d4',
@@ -69,7 +69,7 @@ export function getDefaultColors(type) {
       boxShadow: '2px 3px 4px rgba(60, 60, 60, 0.8)',
     },
   };
-  return colors[type];
+  return colors;
 }
 
 // 等待ttl时长

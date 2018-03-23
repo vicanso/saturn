@@ -1,4 +1,5 @@
 export const USER_INFO = 'USER_INFO';
+export const USER_SETTING = 'USER_SETTING';
 
 export const BOOK_HOT_LIST = 'BOOK_HOT_LIST';
 export const BOOK_CATEGORY_LIST = 'BOOK_CATEGORY_LIST';
