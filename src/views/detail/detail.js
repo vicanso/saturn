@@ -296,7 +296,13 @@ export default {
         const {type, deltaX, center} = e;
         let currentPage = this.currentChapter.page;
         const children = dom.children;
+        const {isShowingSetting} = this;
         if (type === 'tap') {
+          // 如果已显示设置功能，tap则为取消
+          if (isShowingSetting) {
+            this.isShowingSetting = false;
+            return;
+          }
           const x = center.x;
           // 上一页
           if (x < 0.35 * maxWidth) {
@@ -308,8 +314,11 @@ export default {
             changePage(children[currentPage + 1], currentPage + 1, -maxWidth);
             return;
           }
-          const {isShowingSetting} = this;
           this.isShowingSetting = !isShowingSetting;
+          return;
+        }
+        // 如果已显示设置功能，不可切换页
+        if (isShowingSetting) {
           return;
         }
         let index = 0;
