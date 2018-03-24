@@ -27,7 +27,7 @@ export default {
       book: null,
       title: '...',
       updatedAt: '',
-      chapters: null,
+      chaptersInfo: null,
       content: '',
       isShowingSetting: false,
       currentReadInfo: null,
@@ -49,6 +49,7 @@ export default {
       'bookSaveReadInfo',
       'userSaveSetting',
     ]),
+    // 返回
     back() {
       const {steps, $router} = this;
       this.isShowingSetting = false;
@@ -60,6 +61,7 @@ export default {
       this.backTrigger = true;
       this.mode = step;
     },
+    // 获取配置信息
     getSetting() {
       const {userSetting, $refs} = this;
       const dom = $refs.chapterContent;
@@ -75,6 +77,7 @@ export default {
         colors[userSetting.theme],
       );
     },
+    // 调整字体大小
     async changeFontSize(offset) {
       const {userSetting} = this;
       const fontSize = userSetting.fontSize + offset;
@@ -95,6 +98,7 @@ export default {
         this.$toast(err);
       }
     },
+    // 调整主题
     async changeTheme(theme) {
       try {
         await this.userSaveSetting({
@@ -145,6 +149,7 @@ export default {
       }
       return this.fontMetrics;
     },
+    // 显示章节内容
     showChapter(content, showLastPage) {
       const {title, chapterNo} = this.currentReadInfo;
       const dom = this.$refs.chapterContent;
@@ -218,6 +223,7 @@ export default {
         };
       }
     },
+    // 开始阅读
     async read(chapterNo, showLastPage) {
       const {no} = this.$route.params;
       const close = this.$loading();
@@ -253,6 +259,7 @@ export default {
         close();
       }
     },
+    // 切换章节
     changeChapter(offset, isBack) {
       const {currentReadInfo} = this;
       let chapterNo = _.get(currentReadInfo, 'chapterNo', 0);
@@ -263,6 +270,7 @@ export default {
       }
       this.read(chapterNo, isBack);
     },
+    // 初始化事件
     initPenEvent() {
       if (this.hammer) {
         this.hammer.destroy();
@@ -357,20 +365,6 @@ export default {
               currentPage += 1;
             }
             changePage(item, currentPage, transX);
-            // item.style.transition = transition;
-            // item.style.transform = `translate3d(${transX}px, 0px, 0px)`;
-            // const {currentChapter, currentReadInfo} = this;
-            // currentChapter.page = currentPage;
-            // if (currentPage < 0) {
-            //   if (currentReadInfo.chapterNo === 0) {
-            //     this.$toast('已至第一页');
-            //   } else {
-            //     // 切换至上一章的时候，需要显示最后一页
-            //     this.changeChapter(-1, true);
-            //   }
-            // } else if (currentPage >= currentChapter.maxPage) {
-            //   this.changeChapter(1);
-            // }
             break;
           }
           default:
@@ -381,10 +375,69 @@ export default {
       });
       this.hammer = hammer;
     },
+    // 显示章节列表
+    async showChapters(index) {
+      if (index === -1) {
+        this.chaptersInfo.current = -1;
+        this.chaptersInfo.subItems = null;
+        return;
+      }
+      const {book, $route} = this;
+      const limit = 100;
+      const {no} = $route.params;
+      const max = book.latestChapter.no + 1;
+      if (!this.chaptersInfo) {
+        const count = Math.ceil(max / limit);
+        const titles = [];
+        for (let i = 0; i < count; i++) {
+          const start = i * limit + 1;
+          const end = Math.min((i + 1) * limit, max);
+          titles.push(`第${start}-${end}章`);
+        }
+        this.chaptersInfo = {
+          count,
+          current: 0,
+          items: [],
+          subItems: null,
+          titles,
+        };
+      }
+      const {chaptersInfo} = this;
+      const skip = index * limit;
+      chaptersInfo.subItems = null;
+      const close = this.$loading();
+      try {
+        if (!chaptersInfo.items[skip]) {
+          const data = await this.bookChapterList({
+            no,
+            fields: 'title no',
+            limit,
+            skip,
+          });
+          _.forEach(data, (item, i) => {
+            chaptersInfo.items[skip + i] = item;
+          });
+        }
+      } catch (err) {
+        this.$toast(err);
+      } finally {
+        close();
+        chaptersInfo.current = index;
+        chaptersInfo.subItems = chaptersInfo.items.slice(skip, skip + limit);
+      }
+    },
+    changeChapterGroup(index) {
+      const {chaptersInfo} = this;
+      if (chaptersInfo.current === index) {
+        this.showChapters(-1);
+      } else {
+        this.showChapters(index);
+      }
+    },
   },
   watch: {
     async mode(v, prevMode) {
-      const {steps, chapters, backTrigger, book, $route} = this;
+      const {steps, chaptersInfo, backTrigger, book, $route} = this;
       // 如果是返回导致的，不记录
       // 第一次也不记录
       if (!backTrigger && prevMode !== -1) {
@@ -392,30 +445,10 @@ export default {
       }
       this.backTrigger = false;
       if (v === 1) {
-        if (chapters) {
+        if (chaptersInfo) {
           return;
         }
-        const {no} = $route.params;
-        const max = book.latestChapter.no + 1;
-        const limit = 100;
-        const count = Math.ceil(max / limit);
-        const fns = [];
-        for (let index = 0; index < count; index++) {
-          fns.push(
-            this.bookChapterList({
-              no,
-              fields: 'title',
-              limit,
-              skip: index * limit,
-            }),
-          );
-        }
-        try {
-          const data = await Promise.all(fns);
-          this.chapters = _.flatten(data);
-        } catch (err) {
-          this.$toast(err);
-        }
+        this.showChapters(0);
       }
     },
   },

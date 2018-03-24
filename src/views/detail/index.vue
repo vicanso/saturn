@@ -97,19 +97,40 @@
       class="chaptersView fullHeight"
     >
       <loading
-        v-if="!chapters"
+        v-if="!chaptersInfo"
       />
       <div
         v-else
         class="fullHeightScroll"
       >
-        <mt-cell
-          class="chapter"
-          v-for="(item, index) in chapters"
-          :key="index"
-          :title="item.title"
-          @click.native="read(index)"
-        ></mt-cell>
+        <div
+          v-for="(title, index) in chaptersInfo.titles"
+          :key="title"
+        >
+          <mt-cell
+            :title="title"
+            class="chapterGroup"
+            :class="{
+              active: index === chaptersInfo.current,
+            }"
+            @click.native="changeChapterGroup(index)"
+          >
+            <i
+              class="mintui mintui-back pullRight"
+            ></i>
+          </mt-cell>
+          <div
+            v-if="index === chaptersInfo.current"
+          >
+            <mt-cell
+              class="chapter"
+              v-for="item in chaptersInfo.subItems"
+              :key="item.no"
+              :title="item.title"
+              @click.native="read(item.no)"
+            ></mt-cell>
+          </div>
+        </div>
       </div>
     </div>
     <!-- 书籍章节列表 END -->

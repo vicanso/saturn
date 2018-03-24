@@ -127,8 +127,7 @@ const bookCategoryList = async ({commit}) => {
 
 // 按分类展示小说
 const bookListByCategory = async ({commit}, {category, page}) => {
-  // const limit = 10;
-  const limit = 4;
+  const limit = 10;
   const skip = limit * page;
   const params = {
     limit,

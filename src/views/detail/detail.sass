@@ -63,8 +63,18 @@ $imageViewWidth: 100px
 
 .chaptersView
   padding-top: $MAIN_NAV_HEIGHT
+  .chapterGroup
+    background-color: $COLOR_DARY_WHITE
+    border-bottom: $GRAY_BORDER
+    i
+      transform: rotate(270deg)
+    &.active
+      min-height: 30px
+      color: $COLOR_BLUE
+      i
+        color: $COLOR_BLUE
+        transform: rotate(90deg)
   .chapter
-    min-height: 40px
     &:nth-child(even)
       background-color: $COLOR_DARY_WHITE
 
