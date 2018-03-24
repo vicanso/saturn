@@ -110,6 +110,12 @@
           :key="item.name"
           :title="item.name"
           :value="item.author"
+          @click.native="showDetail(item.no)"
+        ></mt-cell>
+        <mt-cell
+          v-if="searchBooks && searchBooks.length === 0"
+          class="tac"
+          title="无符合条件的书籍"
         ></mt-cell>
       </mt-search>
     </div>
