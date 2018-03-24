@@ -112,6 +112,7 @@
             class="chapterGroup"
             :class="{
               active: index === chaptersInfo.current,
+              even: index % 2 === 0,
             }"
             @click.native="changeChapterGroup(index)"
           >
