@@ -38,7 +38,14 @@ export default {
   computed: {
     ...mapState({
       userSetting: ({user}) => user.setting,
+      userFavs: ({user}) => user.favs,
     }),
+    favAdded() {
+      const {userFavs, $route} = this;
+      const {no} = $route.params;
+      console.dir(!!_.find(userFavs, item => item.no === no));
+      return !!_.find(userFavs, item => item.no === no);
+    },
   },
   methods: {
     ...mapActions([
@@ -48,6 +55,7 @@ export default {
       'bookGetReadInfo',
       'bookSaveReadInfo',
       'userSaveSetting',
+      'userFavsToggle',
     ]),
     // 返回
     back() {
@@ -437,7 +445,7 @@ export default {
   },
   watch: {
     async mode(v, prevMode) {
-      const {steps, chaptersInfo, backTrigger, book, $route} = this;
+      const {steps, chaptersInfo, backTrigger} = this;
       // 如果是返回导致的，不记录
       // 第一次也不记录
       if (!backTrigger && prevMode !== -1) {

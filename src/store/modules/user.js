@@ -4,15 +4,25 @@ import localforage from 'localforage';
 
 import {sha256} from '../../helpers/crypto';
 import {USERS_ME, USERS_REGISTER, USERS_LOGIN} from '../../urls';
-import {USER_INFO, USER_SETTING} from '../mutation-types';
+import {
+  USER_INFO,
+  USER_SETTING,
+  USER_FAV,
+  USER_TOGGLE_FAV,
+} from '../mutation-types';
 import {genPassword} from '../../helpers/util';
+
+const settingKey = 'user-setting';
+const favsKey = 'user-favs';
 
 const state = {
   info: null,
   setting: null,
+  favs: null,
 };
 
 const mutations = {
+  // 用户信息
   [USER_INFO](state, data) {
     const isAdmin = _.includes(data.roles, 'admin');
     state.info = _.extend(
@@ -22,11 +32,38 @@ const mutations = {
       data,
     );
   },
+  // 用户设置
   [USER_SETTING](state, data) {
     state.setting = _.clone(data);
   },
+  // 用户收藏
+  [USER_FAV](state, data) {
+    state.favs = data;
+  },
+  // 用户收藏添加/取消
+  [USER_TOGGLE_FAV](state, no) {
+    const {favs} = state;
+    let found = false;
+    const result = [];
+    _.forEach(favs, item => {
+      if (item.no === no) {
+        found = true;
+      } else {
+        result.push(item);
+      }
+    });
+    if (!found) {
+      result.push({
+        no,
+        createdAt: new Date().toISOString(),
+      });
+    }
+    state.favs = result;
+    localforage.setItem(favsKey, result).catch(err => {
+      console.error(`save favs fail, ${err.message}`);
+    });
+  },
 };
-const settingKey = 'user-setting';
 
 const userGetInfo = async ({commit}) => {
   const res = await request.get(USERS_ME, {
@@ -86,12 +123,24 @@ const userSaveSetting = async ({commit}, data) => {
   commit(USER_SETTING, result);
 };
 
+// 用户收藏切换
+const userFavsToggle = async ({commit}, no) => {
+  commit(USER_TOGGLE_FAV, no);
+};
+// 用户收藏
+const userGetFavs = async ({commit}) => {
+  const data = await localforage.getItem(favsKey);
+  commit(USER_FAV, data || []);
+};
+
 export const actions = {
   userGetInfo,
   userRegister,
   userLogin,
   userGetSetting,
   userSaveSetting,
+  userFavsToggle,
+  userGetFavs,
 };
 
 export default {

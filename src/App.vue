@@ -20,7 +20,7 @@ export default {
     Home,
   },
   methods: {
-    ...mapActions(['userGetInfo', 'userGetSetting']),
+    ...mapActions(['userGetInfo', 'userGetSetting', 'userGetFavs']),
   },
   data() {
     return {};
@@ -30,6 +30,7 @@ export default {
     try {
       await this.userGetInfo();
       await this.userGetSetting();
+      await this.userGetFavs();
     } catch (err) {
       this.$toast(err);
     } finally {

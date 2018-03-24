@@ -32,7 +32,16 @@
         <span v-else>继续阅读</span>
       </a>
       <a
+        v-if="favAdded"
+        class="favAdded"
+      >
+        <i class="iconfont icon-pin"></i>
+        <span>已在书架</span>
+      </a>
+      <a
+        v-else
         href="javascript:;"
+        @click="userFavsToggle($route.params.no)"
       >
         <i class="iconfont icon-pin"></i>
         <span>加入书架</span>
