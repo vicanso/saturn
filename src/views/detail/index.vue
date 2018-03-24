@@ -18,18 +18,25 @@
     >
       <a
         href="javascript:;"
-      >下载</a>
+      >
+        <i class="iconfont icon-icondownload"></i>
+        <span>下载</span>
+      </a>
       <a
         href="javascript:;"
         class="read"
         @click="changeChapter(0)"
       >
+        <i class="iconfont icon-office"></i>
         <span v-if="!currentReadInfo">免费阅读</span>
         <span v-else>继续阅读</span>
       </a>
       <a
         href="javascript:;"
-      >加入书架</a>
+      >
+        <i class="iconfont icon-pin"></i>
+        <span>加入书架</span>
+      </a>
     </div>
     <!-- 书籍详情 BEGIN -->
     <div
