@@ -120,6 +120,42 @@
       </mt-search>
     </div>
     <!-- 发现 END -->
+
+    <!-- 书架 BEGIN -->
+    <div
+      v-show="selected === 'shelf'"
+      class="fullHeightScroll"
+    >
+      <loading
+        v-if="!favBooks"
+      />
+      <p
+        class="tac"
+        v-else-if="favBooks.length === 0"
+      >您的书架暂无书籍，请先收藏！</p>
+      <ul
+        v-else
+        class="favBooks"
+      >
+        <li
+          v-for="item in favBooks"
+          :key="item.no"
+          @click="showDetail(item.no)"
+        >
+          <div class="imageView">
+            <image-view
+              :src="item.cover"
+            />
+          </div>
+          <div class="contentView">
+            <h3 class="font16">{{item.name}}</h3>
+            <p v-if="item.latestChapter">最新章节：{{item.latestChapter.title}}</p>
+            <p v-if="item.read">上次阅读：{{item.read.title}}</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <!-- 书架 END -->
   </div>
 </template>
 

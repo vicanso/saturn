@@ -3,7 +3,13 @@ import _ from 'lodash';
 import localforage from 'localforage';
 
 import {sha256} from '../../helpers/crypto';
-import {USERS_ME, USERS_REGISTER, USERS_LOGIN} from '../../urls';
+import {
+  USERS_ME,
+  USERS_REGISTER,
+  USERS_LOGIN,
+  BOOKS,
+  BOOKS_COVER,
+} from '../../urls';
 import {
   USER_INFO,
   USER_SETTING,
@@ -14,6 +20,7 @@ import {genPassword} from '../../helpers/util';
 
 const settingKey = 'user-setting';
 const favsKey = 'user-favs';
+const readKeyPrefix = 'user-read-';
 
 const state = {
   info: null,
@@ -133,6 +140,50 @@ const userGetFavs = async ({commit}) => {
   commit(USER_FAV, data || []);
 };
 
+// 获取书籍阅读信息
+const userGetReadInfo = async (tmp, no) => {
+  const key = `${readKeyPrefix}${no}`;
+  const data = await localforage.getItem(key);
+  return data;
+};
+// 保存阅读信息
+const userSaveReadInfo = async (tmp, {no, data}) => {
+  const key = `${readKeyPrefix}${no}`;
+  await localforage.setItem(
+    key,
+    _.extend(
+      {
+        createdAt: new Date().toISOString(),
+      },
+      data,
+    ),
+  );
+};
+
+// 用户收藏书籍详情
+const userGetFavsDetail = async () => {
+  const noList = _.map(state.favs, item => item.no);
+  if (noList.length === 0) {
+    return [];
+  }
+  const res = await request.get(BOOKS, {
+    params: {
+      no: noList.join(','),
+      fields: 'no name latestChapter',
+    },
+  });
+  const books = res.data.list;
+  const fns = _.map(books, item => {
+    // eslint-disable-next-line
+    item.cover = URL_PREFIX + BOOKS_COVER.replace(':no', item.no);
+    return userGetReadInfo(null, item.no).then(data => {
+      item.read = data;
+    });
+  });
+  await Promise.all(fns);
+  return books;
+};
+
 export const actions = {
   userGetInfo,
   userRegister,
@@ -141,6 +192,9 @@ export const actions = {
   userSaveSetting,
   userFavsToggle,
   userGetFavs,
+  userGetFavsDetail,
+  userGetReadInfo,
+  userSaveReadInfo,
 };
 
 export default {

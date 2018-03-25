@@ -2,11 +2,15 @@ import {mapActions, mapState} from 'vuex';
 import _ from 'lodash';
 import BookView from '../../components/BookView';
 import Intersection from '../../components/Intersection';
+import Loading from '../../components/Loading';
+import ImageView from '../../components/ImageView';
 
 export default {
   components: {
     BookView,
     Intersection,
+    Loading,
+    ImageView,
   },
   data() {
     return {
@@ -38,6 +42,7 @@ export default {
           cls: 'icon-originalimage',
         },
       ],
+      favBooks: null,
     };
   },
   computed: {
@@ -51,6 +56,36 @@ export default {
     keyword() {
       this.debounceSearch();
     },
+    selected(v) {
+      // 如果是首次点击书库分类，加载数据
+      switch (v) {
+        case 'books':
+          if (!this.categoryListLoaded) {
+            this.bookCategoryList()
+              .then(() => this.listByCategory())
+              .then(() => {
+                this.categoryListLoaded = true;
+              })
+              .catch(err => {
+                this.$toast(err);
+              });
+          }
+          break;
+        case 'shelf':
+          if (!this.shelfLoaded) {
+            this.userGetFavsDetail()
+              .then(data => {
+                console.dir(data);
+                this.favBooks = data;
+                this.shelfLoaded = true;
+              })
+              .catch(err => {
+                this.$toast(err);
+              });
+          }
+          break;
+      }
+    },
   },
   methods: {
     ...mapActions([
@@ -58,6 +93,7 @@ export default {
       'bookCategoryList',
       'bookListByCategory',
       'bookSearch',
+      'userGetFavsDetail',
     ]),
     showDetail(no) {
       this.$router.push({
@@ -164,11 +200,6 @@ export default {
       this.$toast(err);
     } finally {
       close();
-      this.bookCategoryList()
-        .then(() => this.listByCategory())
-        .catch(err => {
-          this.$toast(err);
-        });
     }
   },
 };

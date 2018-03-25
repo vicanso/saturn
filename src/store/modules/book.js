@@ -29,7 +29,6 @@ const genCover = item => {
   item.cover = URL_PREFIX + BOOKS_COVER.replace(':no', item.no);
 };
 const chapterKeyPrefix = 'book-chapter-';
-const readKeyPrefix = 'book-read-';
 
 const mutations = {
   [BOOK_HOT_LIST](state, data) {
@@ -181,26 +180,6 @@ const bookChapterList = async (tmp, {no, limit = 10, fields, skip = 0}) => {
   return _.get(res, 'data.list', []);
 };
 
-// 获取书籍阅读信息
-const bookGetReadInfo = async (tmp, no) => {
-  const key = `${readKeyPrefix}${no}`;
-  const data = await localforage.getItem(key);
-  return data;
-};
-// 保存阅读信息
-const bookSaveReadInfo = async (tmp, {no, data}) => {
-  const key = `${readKeyPrefix}${no}`;
-  await localforage.setItem(
-    key,
-    _.extend(
-      {
-        createdAt: new Date().toISOString(),
-      },
-      data,
-    ),
-  );
-};
-
 // 清除过期的章节数据
 const clearExpiredChapters = async () => {
   const oneWeek = 7 * 24 * 3600 * 1000;
@@ -284,8 +263,6 @@ export const actions = {
   bookGetDetail,
   bookChapterList,
   bookChapterDetail,
-  bookSaveReadInfo,
-  bookGetReadInfo,
 };
 
 export default {

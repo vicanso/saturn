@@ -52,8 +52,8 @@ export default {
       'bookGetDetail',
       'bookChapterList',
       'bookChapterDetail',
-      'bookGetReadInfo',
-      'bookSaveReadInfo',
+      'userGetReadInfo',
+      'userSaveReadInfo',
       'userSaveSetting',
       'userFavsToggle',
     ]),
@@ -253,7 +253,7 @@ export default {
           chapterNo,
           title: data.title,
         };
-        this.bookSaveReadInfo({
+        this.userSaveReadInfo({
           no,
           data: this.currentReadInfo,
         });
@@ -475,7 +475,7 @@ export default {
         this.updatedAt = date.substring(5, 16);
       }
       this.book = data;
-      this.currentReadInfo = await this.bookGetReadInfo(no);
+      this.currentReadInfo = await this.userGetReadInfo(no);
       this.mode = 0;
     } catch (err) {
       this.$toast(err);
