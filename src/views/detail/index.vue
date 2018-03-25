@@ -1,7 +1,7 @@
 <template>
   <div class="fullHeight">
     <mt-header
-      class="mainHeader"
+      class="font18 mainHeader"
       :title="title"
       fixed
       v-show="mode !== 2"

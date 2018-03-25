@@ -8,6 +8,7 @@ import {getDate, getDefaultColors, waitFor} from '../../helpers/util';
 import FontMetrics from 'web-font-metrics';
 
 const colors = getDefaultColors();
+const chapterGroupLimit = 100;
 
 export default {
   components: {
@@ -43,7 +44,6 @@ export default {
     favAdded() {
       const {userFavs, $route} = this;
       const {no} = $route.params;
-      console.dir(!!_.find(userFavs, item => item.no === no));
       return !!_.find(userFavs, item => item.no === no);
     },
   },
@@ -176,8 +176,9 @@ export default {
         top:0;
         right:0;
         bottom:0;
+        overflow:hidden;
         background-color:${backgroundColor};
-        padding:${padding}px ${padding}px 0 ${padding}px;
+        padding:${padding}px 0 0 ${padding}px;
         box-shadow:${boxShadow};
       `;
       const headerStyle = `position:absolute;
@@ -391,7 +392,7 @@ export default {
         return;
       }
       const {book, $route} = this;
-      const limit = 100;
+      const limit = chapterGroupLimit;
       const {no} = $route.params;
       const max = book.latestChapter.no + 1;
       if (!this.chaptersInfo) {
@@ -445,7 +446,7 @@ export default {
   },
   watch: {
     async mode(v, prevMode) {
-      const {steps, chaptersInfo, backTrigger} = this;
+      const {steps, chaptersInfo, backTrigger, currentReadInfo} = this;
       // 如果是返回导致的，不记录
       // 第一次也不记录
       if (!backTrigger && prevMode !== -1) {
@@ -456,7 +457,8 @@ export default {
         if (chaptersInfo) {
           return;
         }
-        this.showChapters(0);
+        const chapterNo = _.get(currentReadInfo, 'chapterNo', 0);
+        this.showChapters(_.floor(chapterNo / chapterGroupLimit));
       }
     },
   },
