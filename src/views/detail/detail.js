@@ -270,11 +270,15 @@ export default {
     },
     // 切换章节
     changeChapter(offset, isBack) {
-      const {currentReadInfo} = this;
+      const {currentReadInfo, book} = this;
       let chapterNo = _.get(currentReadInfo, 'chapterNo', 0);
       chapterNo += offset;
       if (chapterNo < 0) {
         this.$toast('已至第一页');
+        return;
+      }
+      if (chapterNo >= book.chapterCount) {
+        this.$toast('已至最后一页');
         return;
       }
       this.read(chapterNo, isBack);
