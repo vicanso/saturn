@@ -178,7 +178,7 @@ export default {
         bottom:0;
         overflow:hidden;
         background-color:${backgroundColor};
-        padding:${padding}px 0 0 ${padding}px;
+        padding:${padding}px ${padding}px 0 ${padding}px;
         box-shadow:${boxShadow};
       `;
       const headerStyle = `position:absolute;
