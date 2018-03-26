@@ -6,6 +6,7 @@ import AddBook from '../views/add-book';
 import UpdateBook from '../views/update-book';
 import ModifyBook from '../views/modify-book';
 import Detail from '../views/detail';
+import AddSetting from '../views/add-setting';
 
 export default [
   {
@@ -47,5 +48,10 @@ export default [
     name: 'detail',
     path: '/detail/:no',
     component: Detail,
+  },
+  {
+    name: 'add-setting',
+    path: '/admin/add-setting',
+    component: AddSetting,
   },
 ];

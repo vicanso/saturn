@@ -33,6 +33,11 @@
           @click.native="go('modify-book')"
           is-link
         ></mt-cell>
+        <mt-cell
+          title="增加配置"
+          @click.native="go('add-setting')"
+          is-link
+        ></mt-cell>
       </div>
     </div>
   </div>
