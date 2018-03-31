@@ -75,7 +75,6 @@ export default {
           if (!this.shelfLoaded) {
             this.userGetFavsDetail()
               .then(data => {
-                console.dir(data);
                 this.favBooks = data;
                 this.shelfLoaded = true;
               })
@@ -177,7 +176,7 @@ export default {
         const data = await this.bookHotList(this.hotPage);
         this.hotPage += 1;
         // 如果已经到最底
-        if (data && data.list.length === 0) {
+        if (data && data.books.length === 0) {
           this.loadHotBooksDone = true;
         }
       } catch (err) {

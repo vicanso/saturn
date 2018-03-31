@@ -121,7 +121,7 @@ const bookUpdate = async (tmp, {no, end, brief, category}) => {
 // 获取书籍分类
 const bookCategoryList = async ({commit}) => {
   const res = await request.get(BOOKS_CATEGORIES);
-  commit(BOOK_CATEGORY_LIST, _.get(res, 'data.list', []));
+  commit(BOOK_CATEGORY_LIST, _.get(res, 'data.categories', []));
 };
 
 // 按分类展示小说
@@ -142,7 +142,7 @@ const bookListByCategory = async ({commit}, {category, page}) => {
   });
   const reset = page === 0;
   commit(BOOK_LIST_BY_CATEGORY, {
-    list: res.data.list,
+    list: res.data.books,
     count: res.data.count,
     reset,
   });
