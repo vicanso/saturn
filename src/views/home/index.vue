@@ -149,8 +149,8 @@
           </div>
           <div class="contentView">
             <h3 class="font16">{{item.name}}</h3>
-            <p v-if="item.latestChapter">最新章节：{{item.latestChapter.title}}</p>
-            <p v-if="item.read">上次阅读：{{item.read.title}}</p>
+            <p class="ellipsis" v-if="item.latestChapter">最新章节：{{item.latestChapter.title}}</p>
+            <p class="ellipsis" v-if="item.read">上次阅读：{{item.read.title}}</p>
           </div>
         </li>
       </ul>

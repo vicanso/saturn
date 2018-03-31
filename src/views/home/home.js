@@ -72,16 +72,13 @@ export default {
           }
           break;
         case 'shelf':
-          if (!this.shelfLoaded) {
-            this.userGetFavsDetail()
-              .then(data => {
-                this.favBooks = data;
-                this.shelfLoaded = true;
-              })
-              .catch(err => {
-                this.$toast(err);
-              });
-          }
+          this.userGetFavsDetail()
+            .then(data => {
+              this.favBooks = data;
+            })
+            .catch(err => {
+              this.$toast(err);
+            });
           break;
       }
     },

@@ -172,7 +172,7 @@ const userGetFavsDetail = async () => {
       fields: 'no name latestChapter',
     },
   });
-  const books = res.data.list;
+  const books = res.data.books;
   const fns = _.map(books, item => {
     // eslint-disable-next-line
     item.cover = URL_PREFIX + BOOKS_COVER.replace(':no', item.no);
