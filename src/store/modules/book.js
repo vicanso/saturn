@@ -141,11 +141,15 @@ const bookListByCategory = async ({commit}, {category, page}) => {
     params,
   });
   const reset = page === 0;
-  commit(BOOK_LIST_BY_CATEGORY, {
-    list: res.data.books,
-    count: res.data.count,
-    reset,
-  });
+  commit(
+    BOOK_LIST_BY_CATEGORY,
+    _.extend(
+      {
+        reset,
+      },
+      res.data,
+    ),
+  );
 };
 
 // 书籍查询

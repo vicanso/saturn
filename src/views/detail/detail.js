@@ -158,11 +158,24 @@ export default {
       return this.fontMetrics;
     },
     // 显示章节内容
-    showChapter(content, showLastPage) {
-      const {title, chapterNo} = this.currentReadInfo;
+    showChapter(content, pageIndex) {
+      const {currentReadInfo} = this;
+      const {title, chapterNo} = currentReadInfo;
       const dom = this.$refs.chapterContent;
       const fontMetrics = this.getFontMetrics();
       const result = fontMetrics.getFillTextList(content);
+      const max = result.length;
+      let currentPage = pageIndex;
+      if (currentPage < 0) {
+        currentPage = max + currentPage;
+      }
+      // 已经切换至最后一页
+      // 刚刚有更新新的章节
+      if (currentPage >= max) {
+        this.changeChapter(1);
+        return;
+      }
+
       const {
         padding,
         backgroundColor,
@@ -197,7 +210,6 @@ export default {
         right: ${padding}px;
         font-weight:400;
       `;
-      const max = result.length;
       const percent = _.ceil(100 * chapterNo / chapterCount, 2);
       const htmls = _.map(result, (item, index) => {
         const header = `<h5 class="font12" style="${headerStyle}">${title}</h5>`;
@@ -213,27 +225,18 @@ export default {
       `;
       dom.style.backgroundColor = backgroundColor;
       dom.innerHTML = loadingHtml + htmls.join('');
-      if (showLastPage) {
-        _.forEach(dom.children, (item, index) => {
-          if (index !== max) {
-            item.style.transform = transform;
-          }
-        });
-        // 设置为显示最后一页
-        this.currentChapter = {
-          maxPage: max,
-          page: max - 1,
-        };
-      } else {
-        // 设置为显示每一页
-        this.currentChapter = {
-          maxPage: max,
-          page: 0,
-        };
-      }
+      _.forEach(dom.children, (item, index) => {
+        if (index <= currentPage) {
+          item.style.transform = transform;
+        }
+      });
+      this.currentChapter = {
+        maxPage: max,
+        page: currentPage,
+      };
     },
     // 开始阅读
-    async read(chapterNo, showLastPage) {
+    async read(chapterNo, index = 0) {
       const {no} = this.$route.params;
       const close = this.$loading();
       this.showReload = false;
@@ -252,12 +255,13 @@ export default {
         this.currentReadInfo = {
           chapterNo,
           title: data.title,
+          page: index,
         };
         this.userSaveReadInfo({
           no,
           data: this.currentReadInfo,
         });
-        this.showChapter(data.content, showLastPage);
+        this.showChapter(data.content, index);
       } catch (err) {
         this.showReload = true;
         // 超时的出错不提示
@@ -269,7 +273,7 @@ export default {
       }
     },
     // 切换章节
-    changeChapter(offset, isBack) {
+    changeChapter(offset, index) {
       const {currentReadInfo, book} = this;
       let chapterNo = _.get(currentReadInfo, 'chapterNo', 0);
       chapterNo += offset;
@@ -281,39 +285,62 @@ export default {
         this.$toast('已至最后一页');
         return;
       }
-      this.read(chapterNo, isBack);
+      this.read(chapterNo, index);
+    },
+    goOnReading() {
+      const {currentReadInfo} = this;
+      if (!currentReadInfo) {
+        this.changeChapter(0, 0);
+        return;
+      }
+      const {page} = currentReadInfo;
+      this.changeChapter(0, page);
     },
     // 初始化事件
     initPenEvent() {
-      if (this.hammer) {
-        this.hammer.destroy();
+      const {hammer, $route, $refs} = this;
+      if (hammer) {
+        hammer.destroy();
       }
       const {maxWidth} = this.getSetting();
       const threshold = 10;
-      const dom = this.$refs.chapterContent;
-      const hammer = new Hammer(dom, {
+      const dom = $refs.chapterContent;
+      this.hammer = new Hammer(dom, {
         direction: Hammer.DIRECTION_HORIZONTAL,
         threshold,
       });
       let moveType = '';
       const transition = '0.4s transform';
+      const {no} = $route.params;
       const changePage = (item, currentPage, transX) => {
         item.style.transition = transition;
         item.style.transform = `translate3d(${transX}px, 0px, 0px)`;
         const {currentChapter, currentReadInfo} = this;
         currentChapter.page = currentPage;
+        currentReadInfo.page = currentPage;
+        this.userSaveReadInfo({
+          no,
+          data: currentReadInfo,
+        }).catch(err => {
+          console.error(`save user read info fail, ${err.message}`);
+        });
         if (currentPage < 0) {
           if (currentReadInfo.chapterNo === 0) {
             this.$toast('已至第一页');
           } else {
             // 切换至上一章的时候，需要显示最后一页
-            this.changeChapter(-1, true);
+            this.changeChapter(-1, -1);
           }
         } else if (currentPage >= currentChapter.maxPage) {
           this.changeChapter(1);
         }
       };
-      hammer.on('pan panend panstart tap', e => {
+      this.hammer.on('pan panend panstart tap', e => {
+        // 如果没有显示章节，所有的事件处理都显示功能菜单
+        if (!this.currentChapter) {
+          this.isShowingSetting = true;
+          return;
+        }
         const {type, deltaX, center} = e;
         let currentPage = this.currentChapter.page;
         const children = dom.children;
@@ -386,7 +413,6 @@ export default {
             break;
         }
       });
-      this.hammer = hammer;
     },
     // 显示章节列表
     async showChapters(index) {

@@ -25,7 +25,7 @@
       <a
         href="javascript:;"
         class="read"
-        @click="changeChapter(0)"
+        @click="goOnReading()"
       >
         <i class="iconfont icon-office"></i>
         <span v-if="!currentReadInfo">免费阅读</span>
