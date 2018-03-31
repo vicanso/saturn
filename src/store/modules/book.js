@@ -41,14 +41,14 @@ const mutations = {
   },
   [BOOK_LIST_BY_CATEGORY](state, data) {
     const {categoryBooks} = state;
-    const {reset, list} = data;
-    _.forEach(list, genCover);
+    const {reset, books} = data;
+    _.forEach(books, genCover);
     if (reset) {
-      categoryBooks.items = list;
+      categoryBooks.items = books;
       categoryBooks.count = data.count;
       categoryBooks.done = false;
     } else {
-      categoryBooks.items = [].concat(categoryBooks.items).concat(list);
+      categoryBooks.items = [].concat(categoryBooks.items).concat(books);
     }
     if (categoryBooks.items.length === categoryBooks.count) {
       categoryBooks.done = true;
@@ -72,7 +72,7 @@ const bookHotList = async ({commit}, page) => {
   const res = await request.get(BOOKS, {
     params,
   });
-  commit(BOOK_HOT_LIST, res.data.list);
+  commit(BOOK_HOT_LIST, res.data.books);
   return res.data;
 };
 
@@ -157,7 +157,7 @@ const bookSearch = async (tmp, {keyword}) => {
       fields: 'no name author',
     },
   });
-  return res.data.list;
+  return res.data.books;
 };
 
 // 获取书籍详情
@@ -177,7 +177,7 @@ const bookChapterList = async (tmp, {no, limit = 10, fields, skip = 0}) => {
       skip,
     },
   });
-  return _.get(res, 'data.list', []);
+  return _.get(res, 'data.chapters', []);
 };
 
 // 清除过期的章节数据
@@ -216,7 +216,7 @@ const bookChapterDetail = async (tmp, {no, chapterNo}) => {
       skip: start,
     },
   });
-  const list = _.get(res, 'data.list');
+  const list = _.get(res, 'data.chapters');
   if (!list || !list[offset]) {
     throw new Error('获取数据失败');
   }
