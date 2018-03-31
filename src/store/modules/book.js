@@ -42,6 +42,12 @@ const mutations = {
   [BOOK_LIST_BY_CATEGORY](state, data) {
     const {categoryBooks} = state;
     const {reset, books} = data;
+    if (reset && !books) {
+      categoryBooks.done = false;
+      categoryBooks.count = 0;
+      categoryBooks.items = null;
+      return;
+    }
     _.forEach(books, genCover);
     if (reset) {
       categoryBooks.items = books;
@@ -137,10 +143,15 @@ const bookListByCategory = async ({commit}, {category, page}) => {
   if (page === 0) {
     params.count = true;
   }
+  const reset = page === 0;
+  if (reset) {
+    commit(BOOK_LIST_BY_CATEGORY, {
+      reset,
+    });
+  }
   const res = await request.get(BOOKS, {
     params,
   });
-  const reset = page === 0;
   commit(
     BOOK_LIST_BY_CATEGORY,
     _.extend(
