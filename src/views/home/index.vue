@@ -98,6 +98,10 @@
       v-show="selected === 'find'"
       class="fullHeight"
     >
+      <p
+        class="tac searching"
+        v-if="keyword && !searchBooks"
+      >搜索中...</p>
       <mt-search
         v-model="keyword"
         :style="{
