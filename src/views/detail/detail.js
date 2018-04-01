@@ -72,14 +72,18 @@ export default {
     // 获取配置信息
     getSetting() {
       const {userSetting, $refs} = this;
+      const {fontSize} = userSetting;
       const dom = $refs.chapterContent;
       const width = dom.clientWidth;
+      const defaultPadding = 20;
+      const fontCount = _.ceil((width - 2 * defaultPadding) / fontSize);
+      const padding = _.floor((width - fontCount * fontSize) / 2);
       return _.extend(
         {
           width,
           height: dom.clientHeight,
-          padding: 20,
-          fontSize: userSetting.fontSize,
+          padding,
+          fontSize,
           maxWidth: width + 10,
         },
         colors[userSetting.theme],
@@ -191,12 +195,12 @@ export default {
         bottom:0;
         overflow:hidden;
         background-color:${backgroundColor};
-        padding:${padding}px ${padding}px 0 ${padding}px;
+        padding:30px ${padding}px 0 ${padding}px;
         box-shadow:${boxShadow};
       `;
       const headerStyle = `position:absolute;
         left:${padding}px;
-        line-height:${padding}px;
+        line-height:30px;
         top:0;
         margin:0;
         padding:0;
