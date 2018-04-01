@@ -1,166 +1,134 @@
-<template>
-  <div class="homePage">
-    <mt-tabbar
-      v-model="selected"
-      class="tabBar"
-    >
-      <mt-tab-item
-        v-for="item in items"
+<template lang="pug">
+//- 精选页面
+mixin HotView
+  .fullHeight.hotView(
+    v-show="selected === 'hot'"
+  )
+    ul.hotList.fullHeightScroll
+      li.bookViewWrapper(
+        v-for="item in hotList"
+        :key="item.no"
+      )
+        BookView(
+          :style="{height: '110px'}"
+          :book="item"
+          @click.native="showDetail(item.no)"
+        )
+      intersection(
+        :style="{height: '3px'}"
+        v-on:intersection="loadMoreHotBooks"
+      )
+
+//- 书库页面
+mixin BooksView
+  .fullHeight.booksView(
+    v-show="selected === 'books'"
+  )
+    ul.categoryList.fullHeightScroll
+      li(
+        v-for="(item, index) in categoryList"
         :key="item.name"
-        :id="item.id"
-        class="tabItem"
-      >
-        <div
-          :class="item.cls + ' iconfont'"
-        ></div>
-        {{ item.name }}
-      </mt-tab-item>
-    </mt-tabbar>
-    <!-- 精选 BEGIN -->
-    <div
-      v-show="selected === 'hot'"
-      class="fullHeight hotView"
-    >
-      <ul
-        class="hotList fullHeightScroll"
-      >
-        <li
-          v-for="item in hotList"
+        :class="{active: selectedCategory === index}"
+        @click="changeCategory(index)"
+      ) {{item.name}}
+    .books.fullHeightScroll
+      p.tac(
+        v-if="!categoryBooks.items || categoryBooks.items.length === 0"
+      ) 正在加载中...
+      ul(
+        v-else
+      )
+        li.bookViewWrapper(
+          v-for="item in categoryBooks.items"
           :key="item.no"
-          class="bookViewWrapper"
-        >
-          <BookView
-            :style="{
-              height: '110px',
-            }"
+        )
+          BookView(
+            :style="{height: '110px'}"
             :book="item"
             @click.native="showDetail(item.no)"
-          ></BookView>
-        </li>
-        <intersection
-          :style="{
-            height: '3px',
-          }"
-          v-on:intersection="loadMoreHotBooks"
-        >
-        </intersection>
-      </ul>
-    </div>
-    <!-- 精选 END -->
+          )
+        intersection(
+          :style="{height: '3px'}"
+          v-on:intersection="loadMoreByCategory"
+        )
 
-    <!-- 书库 BEGIN -->
-    <div
-      v-show="selected === 'books'"
-      class="fullHeight booksView"
-    >
-      <ul
-        class="categoryList fullHeightScroll"
-      >
-        <li
-          v-for="(item, index) in categoryList"
-          :key="item.name"
-          :class="{
-            active: selectedCategory === index, 
-          }"
-          @click="changeCategory(index)"
-        >{{item.name}}</li>
-      </ul>
-      <div class="books fullHeightScroll">
-        <p v-if="!categoryBooks.items || categoryBooks.items.length === 0" class="tac">正在加载中...</p>
-        <ul v-else>
-          <li
-            v-for="item in categoryBooks.items"
-            :key="item.no"
-            class="bookViewWrapper"
-          >
-            <BookView
-              :style="{
-                height: '110px',
-              }"
-              :book="item"
-              @click.native="showDetail(item.no)"
-            ></BookView>
-          </li>
-          <intersection
-            :style="{
-              height: '3px',
-            }"
-            v-on:intersection="loadMoreByCategory"
-          >
-          </intersection>
-        </ul>
-      </div>
-    </div>
-    <!-- 书库 END -->
+//- 发现页面
+mixin SearchView
+  .fullHeight.searchView(
+    v-show="selected === 'find'"
+  )
+    p.tac.searching(
+      v-if="keyword && !searchBooks"
+    ) 搜索中...
+    mt-search.search(
+      v-model="keyword"
+    )
+      mt-cell(
+        v-for="item in searchBooks"
+        :key="item.name"
+        :title="item.name"
+        :value="item.author"
+        @click.native="showDetail(item.no)"
+      )
+      mt-cell.tac(
+        v-if="searchBooks && searchBooks.length === 0"
+        title="无符合条件的书籍"
+      )
 
-    <!-- 发现 BEGIN -->
-    <div
-      v-show="selected === 'find'"
-      class="fullHeight"
-    >
-      <p
-        class="tac searching"
-        v-if="keyword && !searchBooks"
-      >搜索中...</p>
-      <mt-search
-        v-model="keyword"
-        :style="{
-          height: '100%',
-          position: 'relative',
-        }"
-      >
-        <mt-cell
-          v-for="item in searchBooks"
-          :key="item.name"
-          :title="item.name"
-          :value="item.author"
-          @click.native="showDetail(item.no)"
-        ></mt-cell>
-        <mt-cell
-          v-if="searchBooks && searchBooks.length === 0"
-          class="tac"
-          title="无符合条件的书籍"
-        ></mt-cell>
-      </mt-search>
-    </div>
-    <!-- 发现 END -->
+//- 书架页面
+mixin ShelfView
+  .fullHeightScroll(
+    v-show="selected === 'shelf'"
+  )
+    loading(
+      v-if="!favBooks"
+    )
+    p.tac(
+      v-else-if="favBooks.length === 0"
+    )
+    ul.favBooks(
+      v-else
+    )
+      li(
+        v-for="item in favBooks"
+        :key="item.no"
+        @click="showDetail(item.no)"
+      )
+        .imageView
+          image-view(
+            :src="item.cover"
+          )
+        .contentView
+          h3.font16
+            .new.pullLeft(
+              v-if="item.new"
+            )
+            | {{item.name}}
+          p.ellipsis(
+            v-if="item.latestChapter"
+          ) 最新章节：{{item.latestChapter.title}}
+          p.ellipsis(
+            v-if="item.read"
+          ) 上次阅读：{{item.read.title}}
 
-    <!-- 书架 BEGIN -->
-    <div
-      v-show="selected === 'shelf'"
-      class="fullHeightScroll"
-    >
-      <loading
-        v-if="!favBooks"
-      />
-      <p
-        class="tac"
-        v-else-if="favBooks.length === 0"
-      >您的书架暂无书籍，请先收藏！</p>
-      <ul
-        v-else
-        class="favBooks"
-      >
-        <li
-          v-for="item in favBooks"
-          :key="item.no"
-          @click="showDetail(item.no)"
-        >
-          <div class="imageView">
-            <image-view
-              :src="item.cover"
-            />
-          </div>
-          <div class="contentView">
-            <h3 class="font16">{{item.name}}</h3>
-            <p class="ellipsis" v-if="item.latestChapter">最新章节：{{item.latestChapter.title}}</p>
-            <p class="ellipsis" v-if="item.read">上次阅读：{{item.read.title}}</p>
-          </div>
-        </li>
-      </ul>
-    </div>
-    <!-- 书架 END -->
-  </div>
+.homePage
+  mt-tabbar.tabBar(
+    v-model="selected"
+  )
+    mt-tab-item.tabItem(
+      v-for="item in items"
+      :key="item.name"
+      :id="item.id"
+    )
+      .iconfont(
+        :class="item.cls"
+      )
+      | {{item.name}}
+
+  +HotView
+  +BooksView
+  +SearchView
+  +ShelfView
 </template>
 
 <script src="./home.js">

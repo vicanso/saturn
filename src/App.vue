@@ -1,14 +1,8 @@
-<template>
-  <div id="app">
-    <Home
-      class="homePageWrapper"
-    />
-    <transition>
-      <router-view
-        class="childrenPageWrapper"
-      />
-    </transition>
-  </div>
+<template lang="pug">
+#app
+  Home.homePageWrapper
+  transition
+    router-view.childrenPageWrapper 
 </template>
 
 <script>

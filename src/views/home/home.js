@@ -74,7 +74,14 @@ export default {
         case 'shelf':
           this.userGetFavsDetail()
             .then(data => {
-              this.favBooks = data;
+              this.favBooks = _.map(data, item => {
+                const latest = _.get(item, 'latestChapter.no');
+                const current = _.get(item, 'read.chapterNo');
+                if (latest > current) {
+                  item.new = true;
+                }
+                return item;
+              });
             })
             .catch(err => {
               this.$toast(err);

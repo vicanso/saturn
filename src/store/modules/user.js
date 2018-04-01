@@ -3,13 +3,7 @@ import _ from 'lodash';
 import localforage from 'localforage';
 
 import {sha256} from '../../helpers/crypto';
-import {
-  USERS_ME,
-  USERS_REGISTER,
-  USERS_LOGIN,
-  BOOKS,
-  BOOKS_COVER,
-} from '../../urls';
+import {USERS_ME, USERS_LOGIN, BOOKS, BOOKS_COVER} from '../../urls';
 import {
   USER_INFO,
   USER_SETTING,
@@ -83,7 +77,7 @@ const userGetInfo = async ({commit}) => {
 
 // 用户注册
 const userRegister = async ({commit}, {account, password, email}) => {
-  const res = await request.post(USERS_REGISTER, {
+  const res = await request.post(USERS_ME, {
     account,
     password: genPassword(account, password),
     email,
