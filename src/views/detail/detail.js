@@ -360,7 +360,7 @@ export default {
           }
           const x = center.x;
           // 上一页
-          if (x < 0.35 * maxWidth) {
+          if (x < 0.3 * maxWidth) {
             changePage(children[currentPage], currentPage - 1, 0);
             return;
           }
