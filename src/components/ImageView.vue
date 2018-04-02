@@ -1,21 +1,21 @@
-<template>
-  <div
-    :style="{
-      height: '100%',
-    }"
-  >
-    <img
-      :style="{
-        maxWidth: '100%',
-        maxHeight: '100%',
-        display: 'block',
-        margin: 'auto',
-      }"
-      v-if="startToLoading"
-      :src="src"
-    />
-  </div>
+<template lang="pug">
+div(
+  :style=`{
+    height: '100%',
+  }`
+)
+  img(
+    :style=`{
+      maxWidth: '100%',
+      maxHeight: '100%',
+      display: 'block',
+      margin: 'auto',
+    }`
+    v-if="startToLoading"
+    :src="src"
+  )
 </template>
+
 <script>
 export default {
   name: 'image-view',

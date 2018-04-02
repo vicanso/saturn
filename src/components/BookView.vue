@@ -1,27 +1,18 @@
-<template>
-  <div class="bookView">
-    <div class="imageView">
-      <image-view
-        :src="book.cover"
-      />
-    </div>
-    <div class="contentView">
-      <h3 class="font16">{{book.name}}</h3>
-      <p class="font14">{{book.brief}}</p>
-      <div
-        class="pullRight"
-      >
-        <span
-          class="category"
-          v-if="book.category && book.category[0]"
-        >{{book.category[0]}}</span>
-        <span class="category">{{Math.ceil(book.wordCount / 10000) + '万字'}}</span>
-      </div>
-      <div
-        class="font14 ellipsis author"
-      >{{book.author}}</div>
-    </div>
-  </div>
+<template lang="pug">
+.bookView
+  .imageView
+    image-view(
+      :src="book.cover"
+    )
+  .contentView
+    h3.font16 {{book.name}}
+    p.font14 {{book.brief}}
+    .pullRight
+      span.category(
+        v-if="book.category && book.category[0]"
+      ) {{book.category[0]}}
+      span.category {{Math.ceil(book.wordCount / 10000) + '万字'}}
+    .author.ellipsis.font14 {{book.author}}
 </template>
 
 <script>

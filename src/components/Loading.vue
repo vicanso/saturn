@@ -1,12 +1,11 @@
-<template>
-  <div class="loading centerFixed">
-    <mt-spinner
-      type="fading-circle"
-      class="pullLeft"
-    ></mt-spinner>
-    <span>{{tips || "正在加载中..."}}</span>
-  </div>
+<template lang="pug">
+.loading.centerFixed
+  mt-spinner.pullLeft(
+    type="fading-circle"
+  )
+  span {{tips || "正在加载中..."}}
 </template>
+
 <script>
 export default {
   name: 'Loading',
