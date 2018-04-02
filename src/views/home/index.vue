@@ -86,30 +86,45 @@ mixin ShelfView
     p.tac(
       v-else-if="favBooks.length === 0"
     )
-    ul.favBooks(
+    .favBooks(
       v-else
     )
-      li(
+      mt-cell-swipe.favBook(
         v-for="item in favBooks"
         :key="item.no"
-        @click="showDetail(item.no)"
+        @click.native="showDetail(item.no)"
+        :right=`[
+          {
+            content: '删除',
+            style: {
+              background: '#fb004c',
+              color: '#fff',
+              'line-height': '100px',
+              padding: '0 20px',
+            },
+            handler: () => removeFromShelf(item.no),
+          },
+        ]`
       )
-        .imageView
-          image-view(
-            :src="item.cover"
-          )
-        .contentView
-          h3.font16
-            .new.pullLeft(
-              v-if="item.new"
+        template(
+          slot="title"
+        )
+          .imageView
+            image-view(
+              :src="item.cover"
             )
-            | {{item.name}}
-          p.ellipsis(
-            v-if="item.latestChapter"
-          ) 最新章节：{{item.latestChapter.title}}
-          p.ellipsis(
-            v-if="item.read"
-          ) 上次阅读：{{item.read.title}}
+          .contentView
+            h3.font16
+              .new.pullLeft(
+                v-if="item.new"
+              )
+              | {{item.name}}
+            p.ellipsis(
+              v-if="item.latestChapter"
+            ) 最新章节：{{item.latestChapter.title}}
+            p.ellipsis(
+              v-if="item.read"
+            ) 上次阅读：{{item.read.title}}
 
 .homePage
   mt-tabbar.tabBar(

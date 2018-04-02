@@ -83,6 +83,7 @@ export default {
           width,
           height: dom.clientHeight,
           padding,
+          defaultPadding,
           fontSize,
           maxWidth: width + 10,
         },
@@ -144,6 +145,7 @@ export default {
       if (!this.fontMetrics) {
         const {
           padding,
+          defaultPadding,
           fontSize,
           color,
           width,
@@ -152,7 +154,7 @@ export default {
         } = this.getSetting();
         this.fontMetrics = new FontMetrics({
           width: width - 2 * padding,
-          height: height - 2 * padding,
+          height: height - 2 * defaultPadding,
           lineHeight,
           fontSize,
           format: 'html',

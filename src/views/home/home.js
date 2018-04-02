@@ -74,7 +74,7 @@ export default {
         case 'shelf':
           this.userGetFavsDetail()
             .then(data => {
-              this.favBooks = _.map(data, item => {
+              const items = _.map(data, item => {
                 const latest = _.get(item, 'latestChapter.no');
                 const current = _.get(item, 'read.chapterNo');
                 if (latest > current) {
@@ -82,6 +82,7 @@ export default {
                 }
                 return item;
               });
+              this.favBooks = _.sortBy(items, item => item.updatedAt).reverse();
             })
             .catch(err => {
               this.$toast(err);
@@ -97,7 +98,16 @@ export default {
       'bookListByCategory',
       'bookSearch',
       'userGetFavsDetail',
+      'userFavsToggle',
     ]),
+    async removeFromShelf(no) {
+      try {
+        await this.userFavsToggle(no);
+        this.favBooks = _.filter(this.favBooks, item => item.no !== no);
+      } catch (err) {
+        this.$error(err);
+      }
+    },
     showDetail(no) {
       this.$router.push({
         name: 'detail',

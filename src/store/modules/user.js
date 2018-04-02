@@ -150,6 +150,9 @@ const userSaveReadInfo = async (tmp, {no, data}) => {
         createdAt: new Date().toISOString(),
       },
       data,
+      {
+        updatedAt: new Date().toISOString(),
+      },
     ),
   );
 };
