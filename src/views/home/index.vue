@@ -85,7 +85,7 @@ mixin ShelfView
     )
     p.tac(
       v-else-if="favBooks.length === 0"
-    )
+    ) 您尚未收藏小说，请先添加
     .favBooks(
       v-else
     )
