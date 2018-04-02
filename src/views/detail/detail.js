@@ -10,6 +10,9 @@ import FontMetrics from 'web-font-metrics';
 const colors = getDefaultColors();
 const chapterGroupLimit = 100;
 
+const titleHeight = 30;
+const footerHeight = 20;
+
 export default {
   components: {
     ImageView,
@@ -83,7 +86,6 @@ export default {
           width,
           height: dom.clientHeight,
           padding,
-          defaultPadding,
           fontSize,
           maxWidth: width + 10,
         },
@@ -145,7 +147,6 @@ export default {
       if (!this.fontMetrics) {
         const {
           padding,
-          defaultPadding,
           fontSize,
           color,
           width,
@@ -154,7 +155,7 @@ export default {
         } = this.getSetting();
         this.fontMetrics = new FontMetrics({
           width: width - 2 * padding,
-          height: height - 2 * defaultPadding,
+          height: height - titleHeight - footerHeight,
           lineHeight,
           fontSize,
           format: 'html',
@@ -197,12 +198,12 @@ export default {
         bottom:0;
         overflow:hidden;
         background-color:${backgroundColor};
-        padding:30px ${padding}px 0 ${padding}px;
+        padding:${titleHeight}px ${padding}px 0 ${padding}px;
         box-shadow:${boxShadow};
       `;
       const headerStyle = `position:absolute;
         left:${padding}px;
-        line-height:30px;
+        line-height:${titleHeight}px;
         top:0;
         margin:0;
         padding:0;
@@ -210,7 +211,7 @@ export default {
         font-weight:400;
       `;
       const footerStyle = `position:absolute;
-        line-height:${padding}px;
+        line-height:${footerHeight}px;
         bottom:0;
         color:${color};
         right: ${padding}px;
