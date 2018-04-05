@@ -42,7 +42,6 @@ export default {
           cls: 'icon-originalimage',
         },
       ],
-      favBooks: null,
     };
   },
   computed: {
@@ -50,6 +49,7 @@ export default {
       hotList: ({book}) => book.hotList,
       categoryList: ({book}) => book.categoryList,
       categoryBooks: ({book}) => book.categoryBooks,
+      favBooks: ({user}) => user.favDetails,
     }),
   },
   watch: {
@@ -72,21 +72,9 @@ export default {
           }
           break;
         case 'shelf':
-          this.userGetFavsDetail()
-            .then(data => {
-              const items = _.map(data, item => {
-                const latest = _.get(item, 'latestChapter.no');
-                const current = _.get(item, 'read.chapterNo');
-                if (latest > current) {
-                  item.new = true;
-                }
-                return item;
-              });
-              this.favBooks = _.sortBy(items, item => item.updatedAt).reverse();
-            })
-            .catch(err => {
-              this.$toast(err);
-            });
+          this.userGetFavsDetail().catch(err => {
+            this.$toast(err);
+          });
           break;
       }
     },

@@ -9,6 +9,8 @@ import {
   USER_SETTING,
   USER_FAV,
   USER_TOGGLE_FAV,
+  USER_FAV_DETAIL,
+  USER_FAV_DETAIL_UPDATE,
 } from '../mutation-types';
 import {genPassword} from '../../helpers/util';
 
@@ -20,6 +22,7 @@ const state = {
   info: null,
   setting: null,
   favs: null,
+  favDetails: null,
 };
 
 const mutations = {
@@ -63,6 +66,33 @@ const mutations = {
     localforage.setItem(favsKey, result).catch(err => {
       console.error(`save favs fail, ${err.message}`);
     });
+  },
+  [USER_FAV_DETAIL](state, data) {
+    _.forEach(data, item => {
+      const latest = _.get(item, 'latestChapter.no');
+      const current = _.get(item, 'read.chapterNo');
+      if (latest > current) {
+        item.new = true;
+      }
+    });
+    state.favDetails = data;
+  },
+  [USER_FAV_DETAIL_UPDATE](state, {no, readInfo}) {
+    const items = state.favDetails;
+    let index = -1;
+    _.forEach(items, (item, i) => {
+      if (item.no === no) {
+        index = i;
+      }
+    });
+    if (index === -1) {
+      return;
+    }
+    const found = items[index];
+    found.read = readInfo;
+    items.splice(index, 1);
+    items.unshift(found);
+    state.favDetails = items;
   },
 };
 
@@ -141,24 +171,27 @@ const userGetReadInfo = async (tmp, no) => {
   return data;
 };
 // 保存阅读信息
-const userSaveReadInfo = async (tmp, {no, data}) => {
+const userSaveReadInfo = async ({commit}, {no, data}) => {
   const key = `${readKeyPrefix}${no}`;
-  await localforage.setItem(
-    key,
-    _.extend(
-      {
-        createdAt: new Date().toISOString(),
-      },
-      data,
-      {
-        updatedAt: new Date().toISOString(),
-      },
-    ),
+  const now = new Date().toISOString();
+  const readInfo = _.extend(
+    {
+      createdAt: now,
+    },
+    data,
+    {
+      updatedAt: now,
+    },
   );
+  await localforage.setItem(key, readInfo);
+  commit(USER_FAV_DETAIL_UPDATE, {
+    no,
+    readInfo,
+  });
 };
 
 // 用户收藏书籍详情
-const userGetFavsDetail = async () => {
+const userGetFavsDetail = async ({commit}) => {
   const noList = _.map(state.favs, item => item.no);
   if (noList.length === 0) {
     return [];
@@ -178,7 +211,7 @@ const userGetFavsDetail = async () => {
     });
   });
   await Promise.all(fns);
-  return books;
+  commit(USER_FAV_DETAIL, books);
 };
 
 export const actions = {

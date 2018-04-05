@@ -89,22 +89,10 @@ mixin ShelfView
     .favBooks(
       v-else
     )
-      mt-cell-swipe.favBook(
+      mt-cell.favBook(
         v-for="item in favBooks"
         :key="item.no"
         @click.native="showDetail(item.no)"
-        :right=`[
-          {
-            content: '删除',
-            style: {
-              background: '#fb004c',
-              color: '#fff',
-              'line-height': '100px',
-              padding: '0 20px',
-            },
-            handler: () => removeFromShelf(item.no),
-          },
-        ]`
       )
         template(
           slot="title"
