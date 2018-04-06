@@ -15,6 +15,7 @@ mixin HotView
           @click.native="showDetail(item.no)"
         )
       intersection(
+        v-if="hotList.length !== 0"
         :style="{padding: '5px'}"
         v-on:intersection="loadMoreHotBooks"
       )
@@ -90,6 +91,7 @@ mixin ShelfView
     ) 您尚未收藏小说，请先添加
     .favBooks(
       v-else
+      ref="favBooks"
     )
       .tac.font12(
         v-if='isLoadingFavs'
@@ -102,6 +104,11 @@ mixin ShelfView
         :key="item.no"
         @click="showDetail(item.no)"
       )
+        a.remove(
+          v-if="showUnfav"
+          href="javascript:;"
+          @click="removeFromShelf(item.no, $event)"
+        ) 移 除 
         .imageView
           image-view(
             :src="item.cover"

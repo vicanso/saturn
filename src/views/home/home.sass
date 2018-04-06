@@ -76,9 +76,24 @@
   padding: 0
   list-style: none
   .favBook
+    $favBookHeight: 110px
     background-color: $COLOR_WHITE
     padding: 10px
     margin-bottom: 5px
+    user-select: none
+    position: relative
+    height: $favBookHeight
+    .remove
+      text-align: center
+      text-decoration: none
+      position: absolute
+      top: 0
+      right: 0
+      bottom: 0
+      width: 60px
+      background-color: $COLOR_RED
+      color: $COLOR_WHITE
+      line-height: $favBookHeight
     h3
       margin: 0
       line-height: 30px

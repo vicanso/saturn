@@ -64,7 +64,10 @@ const mutations = {
       if (item.no === no) {
         found = true;
       } else {
-        result.push(item);
+        result.push({
+          no: item.no,
+          createdAt: item.createdAt,
+        });
       }
     });
     if (!found) {
@@ -72,11 +75,15 @@ const mutations = {
         no,
         createdAt: new Date().toISOString(),
       });
+    } else {
+      // 如果是需要，需要将favDetails中的数据删除
+      state.favDetails = _.filter(state.favDetails, item => item.no !== no);
     }
-    state.favs = result;
-    localforage.setItem(favsKey, result).catch(err => {
+
+    localforage.setItem(favsKey, _.clone(result)).catch(err => {
       console.error(`save favs fail, ${err.message}`);
     });
+    state.favs = result;
   },
   [USER_FAV_DETAIL](state, data) {
     if (!data || data.length === 0) {

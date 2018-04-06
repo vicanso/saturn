@@ -1,5 +1,7 @@
 import {mapActions, mapState} from 'vuex';
 import _ from 'lodash';
+import Hammer from 'hammerjs';
+
 import BookView from '../../components/BookView';
 import Intersection from '../../components/Intersection';
 import Loading from '../../components/Loading';
@@ -21,6 +23,7 @@ export default {
       hotPage: 0,
       searchBooks: null,
       isLoadingFavs: false,
+      showUnfav: false,
       items: [
         {
           id: 'shelf',
@@ -77,6 +80,7 @@ export default {
           this.userGetFavsDetail()
             .then(() => {
               this.isLoadingFavs = false;
+              this.initFavEvent();
             })
             .catch(err => {
               this.isLoadingFavs = false;
@@ -95,15 +99,33 @@ export default {
       'userGetFavsDetail',
       'userFavsToggle',
     ]),
-    async removeFromShelf(no) {
+    async initFavEvent() {
+      if (this.favBooksHammer) {
+        return;
+      }
+      await this.$next();
+      const favBooks = this.$refs.favBooks;
+      if (!favBooks) {
+        return;
+      }
+      this.favBooksHammer = new Hammer(favBooks);
+      this.favBooksHammer.on('press', () => {
+        this.showUnfav = !this.showUnfav;
+      });
+    },
+    async removeFromShelf(no, e) {
+      e.stopPropagation();
       try {
         await this.userFavsToggle(no);
-        this.favBooks = _.filter(this.favBooks, item => item.no !== no);
       } catch (err) {
-        this.$error(err);
+        this.$toast(err);
       }
     },
     showDetail(no) {
+      if (this.showUnfav) {
+        this.showUnfav = false;
+        return;
+      }
       this.$router.push({
         name: 'detail',
         params: {
