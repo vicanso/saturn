@@ -31,6 +31,13 @@ export default {
       close();
     }
   },
+  beforeCreate() {
+    // 禁止浏览器自带的滚动处理
+    document.addEventListener('touchmove', e => {
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+    });
+  },
 };
 </script>
 
