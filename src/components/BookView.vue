@@ -5,7 +5,7 @@
       :src="book.cover"
     )
   .contentView
-    h3.font16 {{book.name}}
+    h3.font16.ellipsis {{book.name}}
     p.font14 {{book.brief}}
     .pullRight
       span.category(

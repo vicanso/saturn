@@ -49,9 +49,10 @@ mixin BooksView
             @click.native="showDetail(item.no)"
           )
         intersection(
-          :style="{height: '3px'}"
+          :style="{padding: '5px'}"
           v-on:intersection="loadMoreByCategory"
         )
+          .tac.font12(slot="content") 正在加载中...
 
 //- 发现页面
 mixin SearchView
