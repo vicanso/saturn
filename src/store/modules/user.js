@@ -214,6 +214,7 @@ const userGetFavsDetail = async ({commit}) => {
   const noList = _.map(state.favs, item => item.no);
   if (noList.length === 0) {
     commit(USER_FAV_DETAIL, []);
+    return;
   }
   const res = await request.get(BOOKS, {
     params: {
