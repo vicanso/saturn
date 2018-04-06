@@ -92,7 +92,7 @@ mixin ShelfView
       .favBook.clearfix(
         v-for="item in favBooks"
         :key="item.no"
-        @click.native="showDetail(item.no)"
+        @click="showDetail(item.no)"
       )
         .imageView
           image-view(
