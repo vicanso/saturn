@@ -68,6 +68,10 @@ const mutations = {
     });
   },
   [USER_FAV_DETAIL](state, data) {
+    if (!data || data.length === 0) {
+      state.favDetails = [];
+      return;
+    }
     _.forEach(data, item => {
       const latest = _.get(item, 'latestChapter.no');
       const current = _.get(item, 'read.chapterNo');
@@ -76,13 +80,14 @@ const mutations = {
       }
     });
     state.favDetails = _.sortBy(data, item => {
+      const dateList = [];
       if (item.read) {
-        return item.read.updatedAt;
+        dateList.push(item.read.updatedAt);
       }
       if (item.latestChapter) {
-        return item.latestChapter.updatedAt;
+        dateList.push(item.latestChapter.updatedAt);
       }
-      return '';
+      return _.last(dateList.sort()) || '';
     }).reverse();
   },
   [USER_FAV_DETAIL_UPDATE](state, {no, readInfo}) {
@@ -202,7 +207,7 @@ const userSaveReadInfo = async ({commit}, {no, data}) => {
 const userGetFavsDetail = async ({commit}) => {
   const noList = _.map(state.favs, item => item.no);
   if (noList.length === 0) {
-    return [];
+    commit(USER_FAV_DETAIL, []);
   }
   const res = await request.get(BOOKS, {
     params: {
