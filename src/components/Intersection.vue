@@ -1,5 +1,6 @@
 <template lang="pug">
 div
+  slot(name="content")
 </template>
 
 <script>

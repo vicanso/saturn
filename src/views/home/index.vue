@@ -15,9 +15,10 @@ mixin HotView
           @click.native="showDetail(item.no)"
         )
       intersection(
-        :style="{height: '3px'}"
+        :style="{padding: '5px'}"
         v-on:intersection="loadMoreHotBooks"
       )
+        .tac.font12(slot="content") 正在加载中...
 
 //- 书库页面
 mixin BooksView
@@ -89,6 +90,12 @@ mixin ShelfView
     .favBooks(
       v-else
     )
+      .tac.font12(
+        v-if='isLoadingFavs'
+        :style=`{
+          padding: '5px',
+        }`
+      ) 正在刷新中...
       .favBook.clearfix(
         v-for="item in favBooks"
         :key="item.no"

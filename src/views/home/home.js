@@ -20,6 +20,7 @@ export default {
       categorPage: 0,
       hotPage: 0,
       searchBooks: null,
+      isLoadingFavs: false,
       items: [
         {
           id: 'shelf',
@@ -72,9 +73,15 @@ export default {
           }
           break;
         case 'shelf':
-          this.userGetFavsDetail().catch(err => {
-            this.$toast(err);
-          });
+          this.isLoadingFavs = true;
+          this.userGetFavsDetail()
+            .then(() => {
+              this.isLoadingFavs = false;
+            })
+            .catch(err => {
+              this.isLoadingFavs = false;
+              this.$toast(err);
+            });
           break;
       }
     },
