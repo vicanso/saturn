@@ -89,30 +89,27 @@ mixin ShelfView
     .favBooks(
       v-else
     )
-      mt-cell.favBook(
+      .favBook.clearfix(
         v-for="item in favBooks"
         :key="item.no"
         @click.native="showDetail(item.no)"
       )
-        template(
-          slot="title"
-        )
-          .imageView
-            image-view(
-              :src="item.cover"
+        .imageView
+          image-view(
+            :src="item.cover"
+          )
+        .contentView
+          h3.font16
+            .new.pullLeft(
+              v-if="item.new"
             )
-          .contentView
-            h3.font16
-              .new.pullLeft(
-                v-if="item.new"
-              )
-              | {{item.name}}
-            p.ellipsis(
-              v-if="item.latestChapter"
-            ) 最新章节：{{item.latestChapter.title}}
-            p.ellipsis(
-              v-if="item.read"
-            ) 上次阅读：{{item.read.title}}
+            | {{item.name}}
+          p.ellipsis(
+            v-if="item.latestChapter"
+          ) 最新章节：{{item.latestChapter.title}}
+          p.ellipsis(
+            v-if="item.read"
+          ) 上次阅读：{{item.read.title}}
 
 .homePage
   mt-tabbar.tabBar(
