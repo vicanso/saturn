@@ -15,6 +15,7 @@ import {
   BOOK_CATEGORY_LIST,
   BOOK_LIST_BY_CATEGORY,
 } from '../mutation-types';
+const batchLoadLimit = 5;
 const state = {
   hotList: [],
   categoryList: [],
@@ -214,14 +215,9 @@ const clearExpiredChapters = async () => {
   });
 };
 
-// 获取书籍章节内容
-const bookChapterDetail = async (tmp, {no, chapterNo}) => {
-  const key = `${chapterKeyPrefix}${no}-${chapterNo}`;
-  const data = await localforage.getItem(key);
-  if (data) {
-    return data;
-  }
-  const limit = 5;
+// 加载小说章节
+const loadChapterDetail = async (no, chapterNo) => {
+  const limit = batchLoadLimit;
   const start = Math.floor(chapterNo / limit) * limit;
   const offset = chapterNo - start;
   const res = await request.get(BOOKS_CHAPTERS.replace(':no', no), {
@@ -263,6 +259,31 @@ const bookChapterDetail = async (tmp, {no, chapterNo}) => {
     title: result.title,
     content: result.data,
   };
+};
+
+const preloadChapterDetail = async (no, chapterNo) => {
+  const key = `${chapterKeyPrefix}${no}-${chapterNo}`;
+  const data = await localforage.getItem(key);
+  // 如果该数据已缓存，则不需要加载
+  if (data) {
+    return;
+  }
+  await loadChapterDetail(no, chapterNo);
+};
+
+// 获取书籍章节内容
+const bookChapterDetail = async (tmp, {no, chapterNo}) => {
+  const key = `${chapterKeyPrefix}${no}-${chapterNo}`;
+  const data = await localforage.getItem(key);
+  if (data) {
+    _.defer(() => {
+      // 提前预加载后面章节
+      preloadChapterDetail(no, chapterNo + batchLoadLimit);
+    });
+    return data;
+  }
+  const result = await loadChapterDetail(no, chapterNo);
+  return result;
 };
 
 export const actions = {
