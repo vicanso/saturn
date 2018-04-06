@@ -25,6 +25,17 @@ const state = {
   favDetails: null,
 };
 
+// 书籍是否有更新
+const updateNewStatus = item => {
+  const latest = _.get(item, 'latestChapter.no');
+  const current = _.get(item, 'read.chapterNo');
+  if (latest > current) {
+    item.new = true;
+  } else {
+    item.new = false;
+  }
+};
+
 const mutations = {
   // 用户信息
   [USER_INFO](state, data) {
@@ -72,13 +83,7 @@ const mutations = {
       state.favDetails = [];
       return;
     }
-    _.forEach(data, item => {
-      const latest = _.get(item, 'latestChapter.no');
-      const current = _.get(item, 'read.chapterNo');
-      if (latest > current) {
-        item.new = true;
-      }
-    });
+    _.forEach(data, updateNewStatus);
     state.favDetails = _.sortBy(data, item => {
       const dateList = [];
       if (item.read) {
@@ -103,6 +108,7 @@ const mutations = {
     }
     const found = items[index];
     found.read = readInfo;
+    updateNewStatus(found);
     items.splice(index, 1);
     items.unshift(found);
     state.favDetails = items;
