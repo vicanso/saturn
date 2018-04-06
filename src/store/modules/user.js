@@ -75,7 +75,15 @@ const mutations = {
         item.new = true;
       }
     });
-    state.favDetails = data;
+    state.favDetails = _.sortBy(data, item => {
+      if (item.read) {
+        return item.read.updatedAt;
+      }
+      if (item.latestChapter) {
+        return item.latestChapter.updatedAt;
+      }
+      return '';
+    }).reverse();
   },
   [USER_FAV_DETAIL_UPDATE](state, {no, readInfo}) {
     const items = state.favDetails;
