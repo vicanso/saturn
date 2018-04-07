@@ -4,16 +4,21 @@ mixin HotView
   .fullHeight.hotView(
     v-show="selected === 'hot'"
   )
+    loading(
+      v-if="!hotList.length"
+    )
     ul.hotList.fullHeightScroll
       li.bookViewWrapper(
         v-for="item in hotList"
         :key="item.no"
       )
-        BookView(
-          :style="{height: '110px'}"
-          :book="item"
-          @click.native="showDetail(item.no)"
+        v-touch(
+          v-on:tap="showDetail(item.no)"
         )
+          BookView(
+            :style="{height: '110px'}"
+            :book="item"
+          )
       intersection(
         v-if="hotList.length !== 0"
         :style="{padding: '5px'}"
@@ -44,11 +49,13 @@ mixin BooksView
           v-for="item in categoryBooks.items"
           :key="item.no"
         )
-          BookView(
-            :style="{height: '110px'}"
-            :book="item"
-            @click.native="showDetail(item.no)"
+          v-touch(
+            v-on:tap="showDetail(item.no)"
           )
+            BookView(
+              :style="{height: '110px'}"
+              :book="item"
+            )
         intersection(
           :style="{padding: '5px'}"
           v-on:intersection="loadMoreByCategory"
@@ -99,32 +106,33 @@ mixin ShelfView
           padding: '5px',
         }`
       ) 正在刷新中...
-      .favBook.clearfix(
+
+      v-touch(
         v-for="item in favBooks"
         :key="item.no"
-        @click="showDetail(item.no)"
+        v-on:tap="showDetail(item.no, $event)"
       )
-        a.remove(
-          v-if="showUnfav"
-          href="javascript:;"
-          @click="removeFromShelf(item.no, $event)"
-        ) 移 除 
-        .imageView
-          image-view(
-            :src="item.cover"
-          )
-        .contentView
-          h3.font16
-            .new.pullLeft(
-              v-if="item.new"
+        .favBook.clearfix
+          a.remove(
+            href="javascript:;"
+            v-if="showUnfav"
+          ) 移 除 
+          .imageView
+            image-view(
+              :src="item.cover"
             )
-            | {{item.name}}
-          p.ellipsis(
-            v-if="item.latestChapter"
-          ) 最新章节：{{item.latestChapter.title}}
-          p.ellipsis(
-            v-if="item.read"
-          ) 上次阅读：{{item.read.title}}
+          .contentView
+            h3.font16
+              .new.pullLeft(
+                v-if="item.new"
+              )
+              | {{item.name}}
+            p.ellipsis(
+              v-if="item.latestChapter"
+            ) 最新章节：{{item.latestChapter.title}}
+            p.ellipsis(
+              v-if="item.read"
+            ) 上次阅读：{{item.read.title}}
 
 .homePage
   mt-tabbar.tabBar(

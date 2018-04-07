@@ -20,15 +20,12 @@ export default {
     return {};
   },
   async beforeMount() {
-    const close = this.$loading();
     try {
       await this.userGetInfo();
       await this.userGetSetting();
       await this.userGetFavs();
     } catch (err) {
       this.$toast(err);
-    } finally {
-      close();
     }
   },
   beforeCreate() {

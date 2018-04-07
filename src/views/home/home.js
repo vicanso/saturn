@@ -113,16 +113,19 @@ export default {
         this.showUnfav = !this.showUnfav;
       });
     },
-    async removeFromShelf(no, e) {
-      e.stopPropagation();
+    async removeFromShelf(no) {
       try {
         await this.userFavsToggle(no);
       } catch (err) {
         this.$toast(err);
       }
     },
-    showDetail(no) {
+    showDetail(no, e) {
       if (this.showUnfav) {
+        // 如果点击的是移除，则移除小说
+        if (e.target.tagName === 'A') {
+          this.removeFromShelf(no);
+        }
         this.showUnfav = false;
         return;
       }
@@ -223,13 +226,10 @@ export default {
     this.debounceSearch = _.debounce(() => {
       this.search();
     }, 1000);
-    const close = this.$loading();
     try {
       await this.loadMoreHotBooks();
     } catch (err) {
       this.$toast(err);
-    } finally {
-      close();
     }
   },
 };

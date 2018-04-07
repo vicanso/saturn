@@ -5,6 +5,7 @@ import Mint from 'mint-ui';
 import VuexRouterSync from 'vuex-router-sync';
 import 'mint-ui/lib/style.css';
 import localforage from 'localforage';
+import VueTouch from 'vue-touch';
 
 import './assets/iconfont/iconfont.css';
 import App from './App.vue';
@@ -13,6 +14,7 @@ import store from './store';
 import './request-interceptors';
 import {getErrorMessage} from './helpers/util';
 
+Vue.use(VueTouch, {name: 'v-touch'});
 Vue.use(Mint);
 VuexRouterSync.sync(store, router);
 
