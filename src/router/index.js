@@ -27,6 +27,9 @@ router.afterEach(to => {
   }
   const use = Date.now() - pageLoadStats.startedAt;
   pageLoadStats.use = use;
+  if (window._hmt) {
+    window._hmt.push(['_trackPageview', pageLoadStats.to]);
+  }
   // console.info(pageLoadStats);
   pageLoadStats = null;
 });
