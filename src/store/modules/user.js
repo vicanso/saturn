@@ -81,6 +81,7 @@ const mutations = {
     }
 
     localforage.setItem(favsKey, _.clone(result)).catch(err => {
+      // eslint-disable-next-line
       console.error(`save favs fail, ${err.message}`);
     });
     state.favs = result;

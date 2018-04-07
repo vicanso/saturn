@@ -89,7 +89,7 @@ export default {
           fontSize,
           maxWidth: width + 10,
         },
-        colors[userSetting.theme],
+        colors[userSetting.theme || 'yellow'],
       );
     },
     // 调整字体大小
