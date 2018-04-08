@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 
-const target = process.env.TARGET || 'web';
+const target = process.env.VUE_APP_TARGET || 'web';
 
 const output = {};
 let urlPrefix = '/api';

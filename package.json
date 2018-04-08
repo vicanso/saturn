@@ -6,7 +6,7 @@
     "format": "node node_modules/.bin/prettier --write *.js */*.js */*.vue */*/*.js */*/*.vue */*/*/*.js */*/*/*.vue",
     "serve": "vue-cli-service serve --open",
     "build": "NODE_ENV=production vue-cli-service build",
-    "build-app": "TARGET=app NODE_ENV=production vue-cli-service build",
+    "build-app": "VUE_APP_TARGET=app NODE_ENV=production vue-cli-service build",
     "lint": "yarn format && vue-cli-service lint"
   },
   "dependencies": {
