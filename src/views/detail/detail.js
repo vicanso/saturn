@@ -148,7 +148,8 @@ export default {
       }
     },
     getFontMetrics() {
-      if (!this.fontMetrics) {
+      const {fontMetrics, deviceInfo} = this;
+      if (!fontMetrics) {
         const {
           padding,
           fontSize,
@@ -157,9 +158,10 @@ export default {
           height,
           lineHeight,
         } = this.getSetting();
+        const devicePadding = Number.parseInt(deviceInfo.padding, 10);
         this.fontMetrics = new FontMetrics({
           width: width - 2 * padding,
-          height: height - titleHeight - footerHeight,
+          height: height - titleHeight - footerHeight - devicePadding,
           lineHeight,
           fontSize,
           format: 'html',
@@ -170,7 +172,7 @@ export default {
     },
     // 显示章节内容
     showChapter(content, pageIndex) {
-      const {currentReadInfo} = this;
+      const {currentReadInfo, deviceInfo} = this;
       const {title, chapterNo} = currentReadInfo;
       const dom = this.$refs.chapterContent;
       const fontMetrics = this.getFontMetrics();
@@ -194,6 +196,7 @@ export default {
         boxShadow,
         maxWidth,
       } = this.getSetting();
+      const devicePadding = Number.parseInt(deviceInfo.padding, 10);
       const chapterCount = this.book.chapterCount;
       const style = `position:absolute;
         left:0;
@@ -202,13 +205,13 @@ export default {
         bottom:0;
         overflow:hidden;
         background-color:${backgroundColor};
-        padding:${titleHeight}px ${padding}px 0 ${padding}px;
+        padding:${titleHeight + devicePadding}px ${padding}px 0 ${padding}px;
         box-shadow:${boxShadow};
       `;
       const headerStyle = `position:absolute;
         left:${padding}px;
         line-height:${titleHeight}px;
-        top:0;
+        top:${devicePadding}px;
         margin:0;
         padding:0;
         color:${color};

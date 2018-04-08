@@ -29,8 +29,8 @@ export default {
     try {
       await cordova.waitForReady();
       await this.basicDeviceInfo();
-      await this.userGetInfo();
       await this.userGetSetting();
+      await this.userGetInfo();
       await this.userGetFavs();
     } catch (err) {
       this.$toast(err);
