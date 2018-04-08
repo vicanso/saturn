@@ -1,5 +1,6 @@
-import {DEVICE_INFO} from '../mutation-types';
+import _ from 'lodash';
 
+import {DEVICE_INFO} from '../mutation-types';
 import cordova from '../../helpers/cordova';
 
 const state = {
@@ -12,7 +13,12 @@ const mutations = {
   [DEVICE_INFO](state, data) {
     // 如果是ios，status bar的位置需要填充安白
     if (data.platform.toLowerCase() === 'ios') {
-      data.padding = '20px';
+      const iPhoneX = ['iPhone10,3', 'iPhone10,6'];
+      if (_.includes(iPhoneX, data.model)) {
+        data.padding = '32px';
+      } else {
+        data.padding = '20px';
+      }
     } else {
       data.padding = '0px';
     }
