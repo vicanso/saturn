@@ -60,6 +60,9 @@ export default {
       'userSaveSetting',
       'userFavsToggle',
     ]),
+    download() {
+      this.$toast('该功能暂未开放');
+    },
     // 返回
     back() {
       const {steps, $router} = this;

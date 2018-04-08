@@ -184,7 +184,7 @@ const userSaveSetting = async ({commit}, data) => {
 
 // 用户收藏切换
 const userFavsToggle = async ({commit}, no) => {
-  commit(USER_TOGGLE_FAV, no);
+  commit(USER_TOGGLE_FAV, Number.parseInt(no, 10));
 };
 // 用户收藏
 const userGetFavs = async ({commit}) => {

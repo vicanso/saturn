@@ -156,6 +156,9 @@ export default {
     },
     // 切换分类
     changeCategory(index) {
+      if (this.selectedCategory === index) {
+        return;
+      }
       this.categorPage = 0;
       this.selectedCategory = index;
       this.listByCategory();

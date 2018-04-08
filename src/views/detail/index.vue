@@ -4,30 +4,32 @@ mixin FunctionView
   .functionView(
     v-show="mode === 0"
   )
-    a(
+    v-touch(
+      tag="a"
       href="javascript:;"
+      v-on:tap="download"
     )
       i.iconfont.icon-icondownload
       span 下载
-    a.read(
+    v-touch.read(
+      tag="a"
       href="javascript:;"
-      @click="goOnReading()"
+      v-on:tap="goOnReading()"
     )
       i.iconfont.icon-office
       span(v-if="currentReadInfo") 免费阅读
       span(v-else) 继续阅读
-    a.favAdded(
-      v-if="favAdded"
-    )
-      i.iconfont.icon-pin
-      span 已在书架
-    a(
-      v-else
+    v-touch(
+      tag="a"
       href="javascript:;"
-      @click="userFavsToggle($route.params.no)"
+      v-on:tap="userFavsToggle($route.params.no)"
+      :class=`{
+        favAdded,
+      }`
     )
       i.iconfont.icon-pin
-      span 加入书架
+      span(v-if="favAdded") 已在书架
+      span(v-else) 加入书架
 
 //- 书籍详情
 mixin DetailView
@@ -51,16 +53,17 @@ mixin DetailView
               v-if="book.end"
             ) 完本
       .briefView.font14 {{book.brief}}
-      .latestChapter(
-        @click="mode = 1"
-      ) 查看目录
-        i.pullRight.mintui.mintui-back.rotate180.font14
-        span.pullRight.font12(
-          v-if="updatedAt"
-        ) 更新于{{updatedAt}}
-        span.font12(
-          v-if="book.latestChapter"
-        ) 连载至{{book.latestChapter.no + 1}}章
+      v-touch(
+        v-on:tap="mode = 1"
+      )
+        .latestChapter 查看目录
+          i.pullRight.mintui.mintui-back.rotate180.font14
+          span.pullRight.font12(
+            v-if="updatedAt"
+          ) 更新于{{updatedAt}}
+          span.font12(
+            v-if="book.latestChapter"
+          ) 连载至{{book.latestChapter.no + 1}}章
 
 //- 章节列表
 mixin ChapterView

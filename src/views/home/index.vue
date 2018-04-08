@@ -32,11 +32,12 @@ mixin BooksView
     v-show="selected === 'books'"
   )
     ul.categoryList.fullHeightScroll
-      li(
+      v-touch(
+        tag="li"
         v-for="(item, index) in categoryList"
         :key="item.name"
         :class="{active: selectedCategory === index}"
-        @click="changeCategory(index)"
+        v-on:tap="changeCategory(index)"
       ) {{item.name}}
     .books.fullHeightScroll
       p.tac(
