@@ -15,6 +15,7 @@ import {
   BOOK_CATEGORY_LIST,
   BOOK_LIST_BY_CATEGORY,
 } from '../mutation-types';
+import {urlPrefix} from '../../config';
 const batchLoadLimit = 5;
 const state = {
   hotList: [],
@@ -26,8 +27,7 @@ const state = {
   },
 };
 const genCover = item => {
-  // eslint-disable-next-line
-  item.cover = URL_PREFIX + BOOKS_COVER.replace(':no', item.no);
+  item.cover = urlPrefix + BOOKS_COVER.replace(':no', item.no);
 };
 const chapterKeyPrefix = 'book-chapter-';
 

@@ -13,6 +13,7 @@ import {
   USER_FAV_DETAIL_UPDATE,
 } from '../mutation-types';
 import {genPassword} from '../../helpers/util';
+import {urlPrefix} from '../../config';
 
 const settingKey = 'user-setting';
 const favsKey = 'user-favs';
@@ -232,8 +233,7 @@ const userGetFavsDetail = async ({commit}) => {
   });
   const books = res.data.books;
   const fns = _.map(books, item => {
-    // eslint-disable-next-line
-    item.cover = URL_PREFIX + BOOKS_COVER.replace(':no', item.no);
+    item.cover = urlPrefix + BOOKS_COVER.replace(':no', item.no);
     return userGetReadInfo(null, item.no).then(data => {
       item.read = data;
     });

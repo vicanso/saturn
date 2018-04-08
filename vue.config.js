@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 
-const target = process.env.TARGET;
+const target = process.env.TARGET || 'web';
 
 const output = {};
 let urlPrefix = '/api';
@@ -24,8 +24,8 @@ module.exports = {
     plugins: [
       new webpack.DefinePlugin({
         ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
-        APP: JSON.stringify('novel'),
         URL_PREFIX: JSON.stringify(urlPrefix),
+        TARGET: JSON.stringify(target),
       }),
     ],
   },

@@ -48,8 +48,6 @@
       "eslint:recommended"
     ],
     "globals": {
-      "ENV": true,
-      "APP": true
     }
   },
   "postcss": {
