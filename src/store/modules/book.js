@@ -210,6 +210,7 @@ const clearExpiredChapters = async () => {
       return;
     }
     localforage.removeItem(key).catch(err => {
+      // eslint-disable-next-line
       console.error(`localforage remove ${key} fail, ${err.message}`);
     });
   });
@@ -251,6 +252,7 @@ const loadChapterDetail = async (no, chapterNo) => {
         console.error(`save chapter fail, ${err.message}`);
       });
     clearExpiredChapters().catch(err => {
+      // eslint-disable-next-line
       console.error(`clear expired chapters fail, ${err.message}`);
     });
   });
