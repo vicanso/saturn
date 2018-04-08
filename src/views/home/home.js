@@ -6,6 +6,7 @@ import BookView from '../../components/BookView';
 import Intersection from '../../components/Intersection';
 import Loading from '../../components/Loading';
 import ImageView from '../../components/ImageView';
+import cordova from '../../helpers/cordova';
 
 export default {
   components: {
@@ -54,6 +55,7 @@ export default {
       categoryList: ({book}) => book.categoryList,
       categoryBooks: ({book}) => book.categoryBooks,
       favBooks: ({user}) => user.favDetails,
+      deviceInfo: ({basic}) => basic.device,
     }),
   },
   watch: {
@@ -230,6 +232,7 @@ export default {
       this.search();
     }, 1000);
     try {
+      await cordova.waitForReady();
       await this.loadMoreHotBooks();
     } catch (err) {
       this.$toast(err);

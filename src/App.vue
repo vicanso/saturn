@@ -8,19 +8,27 @@
 <script>
 import {mapActions} from 'vuex';
 import Home from './views/home';
+import cordova from './helpers/cordova';
 export default {
   name: 'app',
   components: {
     Home,
   },
   methods: {
-    ...mapActions(['userGetInfo', 'userGetSetting', 'userGetFavs']),
+    ...mapActions([
+      'userGetInfo',
+      'userGetSetting',
+      'userGetFavs',
+      'basicDeviceInfo',
+    ]),
   },
   data() {
     return {};
   },
   async beforeMount() {
     try {
+      await cordova.waitForReady();
+      await this.basicDeviceInfo();
       await this.userGetInfo();
       await this.userGetSetting();
       await this.userGetFavs();

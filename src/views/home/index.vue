@@ -150,7 +150,11 @@ mixin MainNav
       )
       | {{item.name}}
 
-.homePage
+.homePage(
+  :style=`{
+    paddingTop: deviceInfo.padding,
+  }`
+)
   +MainNav
   +HotView
   +BooksView

@@ -43,6 +43,7 @@ export default {
     ...mapState({
       userSetting: ({user}) => user.setting,
       userFavs: ({user}) => user.favs,
+      deviceInfo: ({basic}) => basic.device,
     }),
     favAdded() {
       const {userFavs, $route} = this;

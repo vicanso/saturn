@@ -8,10 +8,12 @@ export function getErrorMessage(err) {
   let message = err;
   if (err && err.response) {
     const {data, headers} = err.response;
-    const id = headers['x-response-id'];
-    // eslint-disable-next-line
-    const code = data.code.replace(`${app}-`, '');
-    message = `${data.message}(${code}) [${id}]`;
+    if (data && data.code) {
+      const id = headers['x-response-id'];
+      // eslint-disable-next-line
+      const code = data.code.replace(`${app}-`, '');
+      message = `${data.message}(${code}) [${id}]`;
+    }
   }
   if (_.isError(message)) {
     message = message.message;

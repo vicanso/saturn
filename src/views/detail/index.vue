@@ -105,6 +105,9 @@ mixin ContentView
       title=""
       fixed
       v-if="isShowingSetting"
+      :style=`{
+        paddingTop: deviceInfo.padding,
+      }`
     )
       mt-button(
         icon="back"
@@ -163,6 +166,9 @@ mixin ContentView
     :title="title"
     fixed
     v-show="mode !== 2"
+    :style=`{
+      paddingTop: deviceInfo.padding,
+    }`
   )
     mt-button(
       icon="back"
@@ -170,9 +176,14 @@ mixin ContentView
       @click="back"
     )
   +FunctionView
-  +DetailView
-  +ChapterView
-  +ChapterView
+  .fullHeight(
+    v-show="mode != 2"
+    :style=`{
+      paddingTop: deviceInfo.padding,
+    }`
+  )
+    +DetailView
+    +ChapterView
   +ContentView
 
 </template>
