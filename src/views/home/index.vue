@@ -134,20 +134,23 @@ mixin ShelfView
               v-if="item.read"
             ) 上次阅读：{{item.read.title}}
 
-.homePage
-  mt-tabbar.tabBar(
-    v-model="selected"
-  )
-    mt-tab-item.tabItem(
+mixin MainNav
+  .mainNav
+    v-touch(
+      tag="a"
+      href="javascript:;"
       v-for="item in items"
       :key="item.name"
-      :id="item.id"
+      :class="selected === item.id ? 'active' : ''"
+      v-on:tap="selected = item.id"
     )
       .iconfont(
         :class="item.cls"
       )
       | {{item.name}}
 
+.homePage
+  +MainNav
   +HotView
   +BooksView
   +SearchView
