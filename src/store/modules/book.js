@@ -9,6 +9,7 @@ import {
   BOOKS_DETAIL,
   BOOKS_CATEGORIES,
   BOOKS_CHAPTERS,
+  BOOKS_REQUEST,
 } from '../../urls';
 import {
   BOOK_HOT_LIST,
@@ -288,6 +289,14 @@ const bookChapterDetail = async (tmp, {no, chapterNo}) => {
   return result;
 };
 
+// 请求添加书籍
+const bookRequestAdd = async (tmp, {author, name}) => {
+  await request.post(BOOKS_REQUEST, {
+    author,
+    name,
+  });
+};
+
 export const actions = {
   bookHotList,
   bookAddSource,
@@ -301,6 +310,7 @@ export const actions = {
   bookGetDetail,
   bookChapterList,
   bookChapterDetail,
+  bookRequestAdd,
 };
 
 export default {

@@ -6,6 +6,7 @@ import ImageView from '../../components/ImageView';
 import Loading from '../../components/Loading';
 import {getDate, getDefaultColors, waitFor} from '../../helpers/util';
 import FontMetrics from 'web-font-metrics';
+import cordova from '../../helpers/cordova';
 
 const colors = getDefaultColors();
 const chapterGroupLimit = 100;
@@ -505,6 +506,13 @@ export default {
         this.showChapters(_.floor(chapterNo / chapterGroupLimit));
       }
     },
+  },
+  mounted() {
+    this.clickBackButton = () => this.back();
+    cordova.on('backbutton', this.clickBackButton);
+  },
+  beforeDestroy() {
+    cordova.removeListener('backbutton', this.clickBackButton);
   },
   async beforeMount() {
     const close = this.$loading();

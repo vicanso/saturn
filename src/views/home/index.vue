@@ -81,10 +81,32 @@ mixin SearchView
         :value="item.author"
         @click.native="showDetail(item.no)"
       )
-      mt-cell.tac(
+      div(
         v-if="searchBooks && searchBooks.length === 0"
-        title="无符合条件的书籍"
       )
+        mt-cell.tac(
+          title="无符合条件的书籍"
+        )
+        h3.font12 如建议添加书籍请填写
+        mt-field(
+          label="作者"
+          placeholder="请输入作者"
+          v-model="requestBook.author"
+        )
+        mt-field(
+          label="书名"
+          placeholder="请输入书名"
+          v-model="requestBook.name"
+        )
+        mt-button(
+          :style=`{
+            marginTop: '20px',
+            width: '100%',
+          }`
+          @click.native="requestAdd"
+          type="primary"
+        ) 建议添加
+
 
 //- 书架页面
 mixin ShelfView

@@ -25,6 +25,7 @@ export default {
       searchBooks: null,
       isLoadingFavs: false,
       showUnfav: false,
+      requestBook: {},
       items: [
         {
           id: 'shelf',
@@ -100,7 +101,27 @@ export default {
       'bookSearch',
       'userGetFavsDetail',
       'userFavsToggle',
+      'bookRequestAdd',
     ]),
+    async requestAdd() {
+      const {author, name} = this.requestBook;
+      if (!author || !name) {
+        this.$toast('作者与书名不能为空');
+        return;
+      }
+      const close = this.$loading();
+      try {
+        await this.bookRequestAdd({
+          author,
+          name,
+        });
+        this.requestBook = {};
+      } catch (err) {
+        this.$toast(err);
+      } finally {
+        close();
+      }
+    },
     async initFavEvent() {
       if (this.favBooksHammer) {
         return;
