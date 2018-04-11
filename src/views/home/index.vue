@@ -123,11 +123,8 @@ mixin ShelfView
       v-else
       ref="favBooks"
     )
-      .tac.font12(
-        v-if='isLoadingFavs'
-        :style=`{
-          padding: '5px',
-        }`
+      .tac.font12.loadingFavs(
+        v-if="isLoadingFavs"
       ) 正在刷新中...
 
       v-touch(
