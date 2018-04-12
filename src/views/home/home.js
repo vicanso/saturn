@@ -7,6 +7,7 @@ import Intersection from '../../components/Intersection';
 import Loading from '../../components/Loading';
 import ImageView from '../../components/ImageView';
 import cordova from '../../helpers/cordova';
+import {waitFor} from '../../helpers/util';
 
 export default {
   components: {
@@ -63,33 +64,35 @@ export default {
     keyword() {
       this.debounceSearch();
     },
-    selected(v) {
+    async selected(v) {
       // 如果是首次点击书库分类，加载数据
       switch (v) {
-        case 'books':
+        case 'books': {
           if (!this.categoryListLoaded) {
-            this.bookCategoryList()
-              .then(() => this.listByCategory())
-              .then(() => {
-                this.categoryListLoaded = true;
-              })
-              .catch(err => {
-                this.$toast(err);
-              });
+            try {
+              await this.bookCategoryList();
+              await this.listByCategory();
+              this.categoryListLoaded = true;
+            } catch (err) {
+              this.$toast(err);
+            }
           }
           break;
-        case 'shelf':
+        }
+        case 'shelf': {
           this.isLoadingFavs = true;
-          this.userGetFavsDetail()
-            .then(() => {
-              this.isLoadingFavs = false;
-              this.initFavEvent();
-            })
-            .catch(err => {
-              this.isLoadingFavs = false;
-              this.$toast(err);
-            });
+          const startedAt = Date.now();
+          try {
+            await this.userGetFavsDetail();
+            this.initFavEvent();
+          } catch (err) {
+            this.$toast(err);
+          } finally {
+            await waitFor(300, startedAt);
+            this.isLoadingFavs = false;
+          }
           break;
+        }
       }
     },
   },
