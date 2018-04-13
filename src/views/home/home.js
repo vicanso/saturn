@@ -27,6 +27,7 @@ export default {
       isLoadingFavs: false,
       showUnfav: false,
       requestBook: {},
+      loadHotBooksDone: false,
       items: [
         {
           id: 'shelf',

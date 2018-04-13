@@ -20,7 +20,7 @@ mixin HotView
             :book="item"
           )
       intersection(
-        v-if="hotList.length !== 0"
+        v-if="!loadHotBooksDone && hotList.length !== 0"
         :style="{padding: '5px'}"
         v-on:intersection="loadMoreHotBooks"
       )
@@ -58,6 +58,7 @@ mixin BooksView
               :book="item"
             )
         intersection(
+          v-if="!categoryBooks.done"
           :style="{padding: '5px'}"
           v-on:intersection="loadMoreByCategory"
         )
