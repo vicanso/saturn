@@ -19,6 +19,10 @@ Vue.use(VueTouch, {name: 'v-touch'});
 Vue.use(Mint);
 VuexRouterSync.sync(store, router);
 
+if (!Number.parseInt) {
+  Number.parseInt = window.parseInt;
+}
+
 // 注入 router 和 store
 Vue.$router = router;
 Vue.$store = store;
