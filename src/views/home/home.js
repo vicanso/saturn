@@ -120,6 +120,7 @@ export default {
           name,
         });
         this.requestBook = {};
+        this.$toast('已添加成功');
       } catch (err) {
         this.$toast(err);
       } finally {
