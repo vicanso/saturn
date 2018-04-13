@@ -167,15 +167,7 @@ const userLogin = async ({commit}, {account, password}) => {
 // 获取用户配置
 const userGetSetting = async ({commit}) => {
   const data = await localforage.getItem(settingKey);
-  commit(
-    USER_SETTING,
-    _.extend(
-      {
-      },
-      defaultUserSetting,
-      data,
-    ),
-  );
+  commit(USER_SETTING, _.extend({}, defaultUserSetting, data));
 };
 
 // 保存用户配置

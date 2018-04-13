@@ -321,7 +321,7 @@ export default {
         hammer.destroy();
       }
       const {maxWidth} = this.getSetting();
-      const threshold = 10;
+      const threshold = 5;
       const dom = $refs.chapterContent;
       this.hammer = new Hammer(dom, {
         direction: Hammer.DIRECTION_HORIZONTAL,
@@ -354,12 +354,15 @@ export default {
         }
       };
       this.hammer.on('pan panend panstart tap', e => {
+        const {type, deltaX, center} = e;
+        if (type === 'pen' && e.deltaX % 3 !== 0) {
+          return;
+        }
         // 如果没有显示章节，所有的事件处理都显示功能菜单
         if (!this.currentChapter) {
           this.isShowingSetting = true;
           return;
         }
-        const {type, deltaX, center} = e;
         let currentPage = this.currentChapter.page;
         const children = dom.children;
         const {isShowingSetting} = this;
