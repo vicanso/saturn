@@ -23,6 +23,13 @@
     <% if (process.env.VUE_APP_TARGET === 'app') { %>
       <script type="text/javascript" src="cordova.js"></script>
     <% } %>
+    <% if (process.env.NODE_ENV !== 'production') { %>
+      <script type="text/javascript">
+        window.onerror = function(msg, url, line, col, error) {
+          alert("msg:" + msg + " url:" + url + " line:" + line + " col:" + col + " error:" + error);
+        };
+      </script>
+    <% } %>
   </head>
   <body>
     <noscript>
