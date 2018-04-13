@@ -7083,9 +7083,9 @@ wcwidth@^1.0.1:
   dependencies:
     defaults "^1.0.3"
 
-web-font-metrics@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/web-font-metrics/-/web-font-metrics-3.0.0.tgz#0b7f67420e7cb54cd245f23ffa68e433a50399dc"
+web-font-metrics@3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/web-font-metrics/-/web-font-metrics-3.1.0.tgz#9a35edc92fef3e40c3541e3900aa2f33e4d3689a"
 
 webpack-chain@^4.5.0:
   version "4.5.0"
