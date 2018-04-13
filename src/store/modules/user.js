@@ -26,6 +26,11 @@ const state = {
   favDetails: null,
 };
 
+const defaultUserSetting = {
+  fontSize: 20,
+  theme: 'yellow',
+};
+
 // 书籍是否有更新
 const updateNewStatus = item => {
   const latest = _.get(item, 'latestChapter.no');
@@ -166,9 +171,8 @@ const userGetSetting = async ({commit}) => {
     USER_SETTING,
     _.extend(
       {
-        fontSize: 20,
-        theme: 'yellow',
       },
+      defaultUserSetting,
       data,
     ),
   );
@@ -177,7 +181,7 @@ const userGetSetting = async ({commit}) => {
 // 保存用户配置
 const userSaveSetting = async ({commit}, data) => {
   const prev = await localforage.getItem(settingKey);
-  const result = _.extend(prev, data);
+  const result = _.extend({}, defaultUserSetting, prev, data);
   await localforage.setItem(settingKey, result);
   commit(USER_SETTING, result);
 };

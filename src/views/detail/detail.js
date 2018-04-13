@@ -124,7 +124,9 @@ export default {
         await this.userSaveSetting({
           theme,
         });
-        this.changeChapter(0);
+        // 颜色调整需要重置
+        this.fontMetrics = null;
+        this.goOnReading();
       } catch (err) {
         this.$toast(err);
       }
@@ -143,7 +145,8 @@ export default {
           nightMode,
           prevTheme: userSetting.theme,
         });
-        this.changeChapter(0);
+        // 颜色调整需要重置
+        this.goOnReading();
       } catch (err) {
         this.$toast(err);
       }
