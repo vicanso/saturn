@@ -172,9 +172,16 @@ mixin MainNav
 
 .homePage(
   :style=`{
-    paddingTop: deviceInfo.padding,
+    paddingTop: (50 + deviceInfo.padding) + 'px',
   }`
 )
+  mt-header.font18.mainHeader(
+    title="闲书"
+    fixed
+    :style=`{
+      paddingTop: deviceInfo.padding + 'px',
+    }`
+  )
   +MainNav
   +HotView
   +BooksView

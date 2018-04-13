@@ -15,12 +15,12 @@ const mutations = {
     if (data.platform.toLowerCase() === 'ios') {
       const iPhoneX = ['iPhone10,3', 'iPhone10,6'];
       if (_.includes(iPhoneX, data.model)) {
-        data.padding = '32px';
+        data.padding = 32;
       } else {
-        data.padding = '20px';
+        data.padding = 20;
       }
     } else {
-      data.padding = '0px';
+      data.padding = 0;
     }
     state.device = data;
   },

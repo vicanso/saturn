@@ -106,7 +106,7 @@ mixin ContentView
       fixed
       v-if="isShowingSetting"
       :style=`{
-        paddingTop: deviceInfo.padding,
+        paddingTop: deviceInfo.padding + 'px',
       }`
     )
       mt-button(
@@ -167,7 +167,7 @@ mixin ContentView
     fixed
     v-show="mode !== 2"
     :style=`{
-      paddingTop: deviceInfo.padding,
+      paddingTop: deviceInfo.padding + 'px',
     }`
   )
     mt-button(
@@ -179,7 +179,7 @@ mixin ContentView
   .fullHeight(
     v-show="mode != 2"
     :style=`{
-      paddingTop: deviceInfo.padding,
+      paddingTop: deviceInfo.padding + 'px',
     }`
   )
     +DetailView
