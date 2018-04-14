@@ -1,4 +1,14 @@
 <template lang="pug">
+//- 用户设置页面
+mixin UserSettingView
+  .fullHeight.hotView(
+    v-show="selected === 'userSetting'"
+  )
+    <mt-cell :title="userSetting.fontSize" value="阅读字体"></mt-cell>
+    <mt-cell :title="userSetting.theme" value="阅读主题"></mt-cell>
+    <mt-cell :title="deviceInfo.version" value="系统版本"></mt-cell>
+    <mt-cell :title="deviceInfo.serial" value="序列号"></mt-cell>
+    <mt-cell :title="deviceInfo.uuid" value="UUID"></mt-cell>
 //- 精选页面
 mixin HotView
   .fullHeight.hotView(
@@ -183,11 +193,18 @@ mixin MainNav
       paddingTop: deviceInfo.padding + 'px',
     }`
   )
+    v-touch.bold.userSetting(
+      tag="a"
+      slot="right"
+      v-on:tap="selected = 'userSetting'"
+    )
+      i.iconfont.icon-set
   +MainNav
   +HotView
   +BooksView
   +SearchView
   +ShelfView
+  +UserSettingView
 </template>
 
 <script src="./home.js">

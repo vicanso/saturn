@@ -59,6 +59,7 @@ export default {
       categoryBooks: ({book}) => book.categoryBooks,
       favBooks: ({user}) => user.favDetails,
       deviceInfo: ({basic}) => basic.device,
+      userSetting: ({user}) => user.setting,
     }),
   },
   watch: {
