@@ -19,16 +19,16 @@ const settingKey = 'user-setting';
 const favsKey = 'user-favs';
 const readKeyPrefix = 'user-read-';
 
+const defaultUserSetting = {
+  fontSize: 20,
+  theme: 'yellow',
+};
+
 const state = {
   info: null,
   setting: null,
   favs: null,
   favDetails: null,
-};
-
-const defaultUserSetting = {
-  fontSize: 20,
-  theme: 'yellow',
 };
 
 // 书籍是否有更新
