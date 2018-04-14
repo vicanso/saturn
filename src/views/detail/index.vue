@@ -1,4 +1,12 @@
 <template lang="pug">
+mixin HeaderBackBtn
+  v-touch.headerBack(
+    tag="a"
+    slot="left"
+    v-on:tap="back"
+  )
+    i.mintui.mintui-back
+
 //- 功能页
 mixin FunctionView
   .functionView(
@@ -109,11 +117,7 @@ mixin ContentView
         paddingTop: deviceInfo.padding + 'px',
       }`
     )
-      mt-button(
-        icon="back"
-        slot="left"
-        @click="back"
-      )
+      +HeaderBackBtn
       mt-button.mright20(
         slot="right"
         @click.native="toggleNightTheme"
@@ -170,11 +174,7 @@ mixin ContentView
       paddingTop: deviceInfo.padding + 'px',
     }`
   )
-    mt-button(
-      icon="back"
-      slot="left"
-      @click="back"
-    )
+    +HeaderBackBtn
   +FunctionView
   .fullHeight(
     v-show="mode != 2"
