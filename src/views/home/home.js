@@ -258,6 +258,21 @@ export default {
     this.debounceSearch = _.debounce(() => {
       this.search();
     }, 1000);
+    cordova.on('statusTap', () => {
+      const {$router, selected, $refs} = this;
+      const currentRoute = _.get($router, 'history.current.name');
+      // 非首页不处理
+      if (currentRoute) {
+        return;
+      }
+      const {hotList} = $refs;
+      if (selected === 'hot') {
+        if (!hotList) {
+          return;
+        }
+        hotList.scrollTop = 0;
+      }
+    });
     try {
       await cordova.waitForReady();
       await this.loadMoreHotBooks();

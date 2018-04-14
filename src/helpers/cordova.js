@@ -63,8 +63,15 @@ _.forEach(
     'volumedownbutton',
     'volumeupbutton',
     'activated',
+    'statusTap',
   ],
   name => {
+    if (name === 'statusTap') {
+      window.addEventListener(name, () => {
+        cordova.emit(name);
+      });
+      return;
+    }
     document.addEventListener(
       name,
       () => {

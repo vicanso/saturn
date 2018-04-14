@@ -17,7 +17,9 @@ mixin HotView
     loading(
       v-if="!hotList.length"
     )
-    ul.hotList.fullHeightScroll
+    ul.hotList.fullHeightScroll(
+      ref="hotList"
+    )
       li.bookViewWrapper(
         v-for="item in hotList"
         :key="item.no"
