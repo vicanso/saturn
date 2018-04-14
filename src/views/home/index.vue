@@ -177,6 +177,7 @@ mixin MainNav
 )
   mt-header.font18.mainHeader(
     title="闲书"
+    v-if="deviceInfo.platform"
     fixed
     :style=`{
       paddingTop: deviceInfo.padding + 'px',

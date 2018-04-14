@@ -5,7 +5,7 @@ import cordova from '../../helpers/cordova';
 
 const state = {
   device: {
-    padding: '0px',
+    padding: 0,
   },
 };
 
