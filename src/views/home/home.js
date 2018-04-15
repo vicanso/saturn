@@ -7,7 +7,14 @@ import Intersection from '../../components/Intersection';
 import Loading from '../../components/Loading';
 import ImageView from '../../components/ImageView';
 import cordova from '../../helpers/cordova';
-import {waitFor} from '../../helpers/util';
+import {waitFor, scrollTop} from '../../helpers/util';
+
+const ids = {
+  shelf: 'shelf',
+  hot: 'hot',
+  books: 'books',
+  find: 'find',
+};
 
 export default {
   components: {
@@ -19,7 +26,7 @@ export default {
   data() {
     return {
       keyword: '',
-      selected: 'hot',
+      selected: ids.hot,
       selectedCategory: 0,
       categorPage: 0,
       hotPage: 0,
@@ -30,22 +37,22 @@ export default {
       loadHotBooksDone: false,
       items: [
         {
-          id: 'shelf',
+          id: ids.shelf,
           name: '书架',
           cls: 'icon-all',
         },
         {
-          id: 'hot',
+          id: ids.hot,
           name: '精选',
           cls: 'icon-creditlevel',
         },
         {
-          id: 'books',
+          id: ids.books,
           name: '书库',
           cls: 'icon-viewgallery',
         },
         {
-          id: 'find',
+          id: ids.find,
           name: '发现',
           cls: 'icon-originalimage',
         },
@@ -265,13 +272,22 @@ export default {
       if (currentRoute) {
         return;
       }
-      const {hotList} = $refs;
-      if (selected === 'hot') {
-        if (!hotList) {
-          return;
-        }
-        hotList.scrollTop = 0;
+      const {hotList, categoryBookList} = $refs;
+      let element;
+      switch (selected) {
+        case ids.hot:
+          element = hotList;
+          break;
+        case ids.books:
+          element = categoryBookList;
+          break;
+        default:
+          break;
       }
+      if (!element) {
+        return;
+      }
+      scrollTop(element, -80);
     });
     try {
       await cordova.waitForReady();

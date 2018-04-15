@@ -51,7 +51,9 @@ mixin BooksView
         :class="{active: selectedCategory === index}"
         v-on:tap="changeCategory(index)"
       ) {{item.name}}
-    .books.fullHeightScroll
+    .books.fullHeightScroll(
+      ref="categoryBookList"
+    )
       p.tac(
         v-if="!categoryBooks.items || categoryBooks.items.length === 0"
       ) 正在加载中...

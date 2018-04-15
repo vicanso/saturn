@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import * as Velocity from 'velocity-animate';
 
 import {sha256} from './crypto';
 import {app} from '../config';
@@ -84,4 +85,21 @@ export function waitFor(ttl, startedAt) {
   return new Promise(resolve => {
     setTimeout(resolve, Math.max(0, delay));
   });
+}
+
+// 将滚动条滚动至top
+export function scrollTop(element, top, options) {
+  if (!element) {
+    return;
+  }
+  const offset = -element.scrollTop + top;
+  const opts = _.extend(
+    {
+      container: element,
+      duration: 300,
+      offset,
+    },
+    options,
+  );
+  Velocity(element, 'scroll', opts);
 }
