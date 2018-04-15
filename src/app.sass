@@ -51,6 +51,16 @@
 .bold
   font-weight: 600
 
+/* Enter and leave animations can use different */
+/* durations and timing functions.              */
+.bounce-right-fade-enter-active
+  transition: all .3s ease
+.bounce-right-fade-leave-active
+  transition: all .5s ease
+.bounce-right-fade-enter, .bounce-right-fade-leave-to
+  transform: translate3d(100%, 0, 0)
+  opacity: 0
+
 .fullHeight
   height: 100%
   overflow: hidden

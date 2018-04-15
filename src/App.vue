@@ -1,7 +1,9 @@
 <template lang="pug">
 #app
   Home.homePageWrapper
-  transition
+  transition(
+    name="bounce-right-fade"
+  )
     router-view.childrenPageWrapper 
 </template>
 
