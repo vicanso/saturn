@@ -95,6 +95,9 @@ body, html
   height: 100%
 .childrenPageWrapper
   z-index: 1
+// 由于childrenPageWrapper调整了z-index，因此需要调整loading的index
+.mint-indicator-wrapper, .mint-indicator-mask
+  z-index: 1
 
 .mainHeader
   height: $MAIN_NAV_HEIGHT
