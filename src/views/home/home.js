@@ -67,6 +67,7 @@ export default {
       favBooks: ({user}) => user.favDetails,
       deviceInfo: ({basic}) => basic.device,
       userSetting: ({user}) => user.setting,
+      userInfo: ({user}) => user.info,
     }),
   },
   watch: {
