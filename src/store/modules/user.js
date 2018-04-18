@@ -26,7 +26,7 @@ const defaultUserSetting = {
 
 const state = {
   info: null,
-  setting: null,
+  setting: _.extend({}, defaultUserSetting),
   favs: null,
   favDetails: null,
 };

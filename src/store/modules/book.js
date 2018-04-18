@@ -15,6 +15,7 @@ import {
   BOOK_HOT_LIST,
   BOOK_CATEGORY_LIST,
   BOOK_LIST_BY_CATEGORY,
+  BOOK_CACHE_SIZE,
 } from '../mutation-types';
 import {urlPrefix} from '../../config';
 const batchLoadLimit = 5;
@@ -26,6 +27,7 @@ const state = {
     items: [],
     done: false,
   },
+  cacheSize: null,
 };
 const genCover = item => {
   item.cover = urlPrefix + BOOKS_COVER.replace(':no', item.no);
@@ -61,6 +63,9 @@ const mutations = {
     if (categoryBooks.items.length === categoryBooks.count) {
       categoryBooks.done = true;
     }
+  },
+  [BOOK_CACHE_SIZE](state, size) {
+    state.cacheSize = size;
   },
 };
 
@@ -198,9 +203,8 @@ const bookChapterList = async (tmp, {no, limit = 10, fields, skip = 0}) => {
 };
 
 // 清除过期的章节数据
-const clearExpiredChapters = async () => {
-  const oneWeek = 7 * 24 * 3600 * 1000;
-  const expiredDate = new Date(Date.now() - oneWeek).toISOString();
+const clearExpiredChapters = async offset => {
+  const expiredDate = new Date(Date.now() - offset).toISOString();
   localforage.iterate((value, key) => {
     // 非chapter的数据不处理
     if (key.indexOf(chapterKeyPrefix) !== 0) {
@@ -252,7 +256,8 @@ const loadChapterDetail = async (no, chapterNo) => {
         // eslint-disable-next-line
         console.error(`save chapter fail, ${err.message}`);
       });
-    clearExpiredChapters().catch(err => {
+    const oneWeek = 7 * 24 * 3600 * 1000;
+    clearExpiredChapters(oneWeek).catch(err => {
       // eslint-disable-next-line
       console.error(`clear expired chapters fail, ${err.message}`);
     });
@@ -297,6 +302,25 @@ const bookRequestAdd = async (tmp, {author, name}) => {
   });
 };
 
+// 清除章节缓存数据
+const bookClearChapterCache = async ({commit}) => {
+  await clearExpiredChapters(0);
+  commit(BOOK_CACHE_SIZE, 0);
+};
+
+// 获取缓存的章节大小
+const bookGetCacheSize = async ({commit}) => {
+  const keys = await localforage.keys();
+  let size = 0;
+  _.forEach(keys, key => {
+    if (key.indexOf(chapterKeyPrefix) === 0) {
+      // 大概每一章节4kb数据
+      size += 4000;
+    }
+  });
+  commit(BOOK_CACHE_SIZE, _.round(size / (1024 * 1024), 2));
+};
+
 export const actions = {
   bookHotList,
   bookAddSource,
@@ -311,6 +335,8 @@ export const actions = {
   bookChapterList,
   bookChapterDetail,
   bookRequestAdd,
+  bookClearChapterCache,
+  bookGetCacheSize,
 };
 
 export default {

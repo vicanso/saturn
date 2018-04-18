@@ -4,12 +4,44 @@ mixin UserSettingView
   .fullHeight.hotView(
     v-if="selected === 'userSetting' && userSetting && deviceInfo"
   )
-    <mt-cell :title="'' +userSetting.fontSize" value="阅读字体"></mt-cell>
-    <mt-cell :title="userSetting.theme" value="阅读主题"></mt-cell>
-    <mt-cell :title="deviceInfo.version" value="系统版本"></mt-cell>
-    <mt-cell :title="userInfo.track" value="设备标识"></mt-cell>
-    <mt-cell :title="deviceInfo.serial" value="序列号"></mt-cell>
-    <mt-cell :title="deviceInfo.uuid" value="UUID"></mt-cell>
+    mt-cell(
+      :title="'' +userSetting.fontSize"
+      value="阅读字体"
+    )
+    mt-cell(
+      :title="userSetting.theme"
+      value="阅读主题"
+    )
+    mt-cell(
+      :title="bookCacheSize + 'MB'"
+      value="缓存数据"
+    )
+    mt-cell(
+      :title="deviceInfo.version" 
+      value="系统版本"
+    )
+    mt-cell(
+      :title="userInfo.track" 
+      value="设备标识"
+    )
+    mt-cell(
+      :title="deviceInfo.serial"
+      value="序列号"
+    )
+    mt-cell(
+      :title="deviceInfo.uuid"
+      value="uuid"
+    )
+    v-touch(
+      v-on:tap="clearCache"
+    )
+      mt-button.mtop10(
+        type="primary"
+        :style=`{
+          width: '100%',
+        }`
+      ) 清除缓存
+
 //- 精选页面
 mixin HotView
   .fullHeight.hotView(

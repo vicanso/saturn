@@ -68,6 +68,7 @@ export default {
       deviceInfo: ({basic}) => basic.device,
       userSetting: ({user}) => user.setting,
       userInfo: ({user}) => user.info,
+      bookCacheSize: ({book}) => book.cacheSize,
     }),
   },
   watch: {
@@ -115,7 +116,19 @@ export default {
       'userGetFavsDetail',
       'userFavsToggle',
       'bookRequestAdd',
+      'bookClearChapterCache',
     ]),
+    async clearCache() {
+      const close = this.$loading();
+      try {
+        await this.bookClearChapterCache();
+        this.$toast('清除缓存成功');
+      } catch (err) {
+        this.$toast(err);
+      } finally {
+        close();
+      }
+    },
     async requestAdd() {
       const {author, name} = this.requestBook;
       if (!author || !name) {
