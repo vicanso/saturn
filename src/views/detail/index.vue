@@ -122,13 +122,13 @@ mixin ContentView
         slot="right"
         @click.native="toggleNightTheme"
       )
-        i.iconfont.icon-light
+        i.iconfont.icon-light.mright5
         | 夜间
-      mt-button(
+      mt-button.mright20(
         slot="right"
         @click.native="mode = 1"
       )
-        i.iconfont.icon-category
+        i.iconfont.icon-category.mright5
         | 章节
     .settingFooter(
       v-if="isShowingSetting"
