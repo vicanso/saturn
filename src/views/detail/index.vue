@@ -11,6 +11,9 @@ mixin HeaderBackBtn
 mixin FunctionView
   .functionView(
     v-show="mode === 0"
+    :style=`{
+      height: (deviceInfo.mainNav + deviceInfo.paddingBottom) + 'px',
+    }`
   )
     v-touch(
       tag="a"
@@ -43,6 +46,9 @@ mixin FunctionView
 mixin DetailView
   .bookView.fullHeight(
     v-show="mode === 0"
+    :style=`{
+      paddingBottom: (deviceInfo.mainNav + deviceInfo.paddingBottom) + 'px',
+    }`
   ): .fullHeightScroll
     .infoView(
       v-if="book"
@@ -114,7 +120,7 @@ mixin ContentView
       fixed
       v-if="isShowingSetting"
       :style=`{
-        paddingTop: deviceInfo.padding + 'px',
+        paddingTop: deviceInfo.paddingTop + 'px',
       }`
     )
       +HeaderBackBtn
@@ -171,7 +177,7 @@ mixin ContentView
     fixed
     v-show="mode !== 2"
     :style=`{
-      paddingTop: deviceInfo.padding + 'px',
+      paddingTop: deviceInfo.paddingTop + 'px',
     }`
   )
     +HeaderBackBtn
@@ -179,7 +185,7 @@ mixin ContentView
   .fullHeight(
     v-show="mode != 2"
     :style=`{
-      paddingTop: deviceInfo.padding + 'px',
+      paddingTop: deviceInfo.paddingTop + 'px',
     }`
   )
     +DetailView

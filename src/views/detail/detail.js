@@ -162,7 +162,7 @@ export default {
           height,
           lineHeight,
         } = this.getSetting();
-        const devicePadding = deviceInfo.padding;
+        const devicePadding = deviceInfo.paddingTop;
         this.fontMetrics = new FontMetrics({
           width: width - 2 * padding,
           height: height - titleHeight - footerHeight - devicePadding,
@@ -200,7 +200,7 @@ export default {
         boxShadow,
         maxWidth,
       } = this.getSetting();
-      const devicePadding = deviceInfo.padding;
+      const devicePadding = deviceInfo.paddingTop;
       const chapterCount = this.book.chapterCount;
       const style = `position:absolute;
         left:0;

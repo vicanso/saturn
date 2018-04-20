@@ -203,14 +203,21 @@ mixin ShelfView
             ) 上次阅读：{{item.read.title}}
 
 mixin MainNav
-  .mainNav
-    v-touch(
+  .mainNav.contentBox(
+    :style=`{
+      height: (deviceInfo.mainNav + deviceInfo.paddingBottom) + 'px',
+    }`
+  )
+    v-touch.contentBox(
       tag="a"
       href="javascript:;"
       v-for="item in items"
       :key="item.name"
       :class="selected === item.id ? 'active' : ''"
       v-on:tap="selected = item.id"
+      :style=`{
+        paddingBottom: deviceInfo.paddingBottom + 'px',
+      }`
     )
       .iconfont(
         :class="item.cls"
@@ -219,7 +226,8 @@ mixin MainNav
 
 .homePage(
   :style=`{
-    paddingTop: (50 + deviceInfo.padding) + 'px',
+    paddingTop: (deviceInfo.mainNav + deviceInfo.paddingTop) + 'px',
+    paddingBottom: (deviceInfo.mainNav + deviceInfo.paddingBottom + 1) + 'px',
   }`
 )
   mt-header.font18.mainHeader(
@@ -227,7 +235,7 @@ mixin MainNav
     v-if="deviceInfo.platform"
     fixed
     :style=`{
-      paddingTop: deviceInfo.padding + 'px',
+      paddingTop: deviceInfo.paddingTop + 'px',
     }`
   )
     v-touch.bold.userSetting(

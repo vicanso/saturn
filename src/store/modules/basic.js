@@ -3,26 +3,31 @@ import _ from 'lodash';
 import {DEVICE_INFO} from '../mutation-types';
 import cordova from '../../helpers/cordova';
 
+const defaultInfo = {
+  paddingTop: 0,
+  paddingBottom: 0,
+  mainNav: 50,
+};
+
 const state = {
-  device: {
-    padding: 0,
-  },
+  device: _.extend({}, defaultInfo),
 };
 
 const mutations = {
   [DEVICE_INFO](state, data) {
+    data.paddingTop = 0;
+    data.paddingBottom = 0;
     // 如果是ios，status bar的位置需要填充安白
     if (data.platform.toLowerCase() === 'ios') {
       const iPhoneX = ['iPhone10,3', 'iPhone10,6'];
       if (_.includes(iPhoneX, data.model)) {
-        data.padding = 32;
+        data.paddingTop = 32;
+        data.paddingBottom = 10;
       } else {
-        data.padding = 20;
+        data.paddingTop = 20;
       }
-    } else {
-      data.padding = 0;
     }
-    state.device = data;
+    state.device = _.extend({}, defaultInfo, data);
   },
 };
 
