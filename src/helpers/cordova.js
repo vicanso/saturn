@@ -44,6 +44,12 @@ class Cordova extends EventEmitter {
     }
     return window.device;
   }
+  statusBarCall(fn, ...args) {
+    if (!window.StatusBar) {
+      return;
+    }
+    window.StatusBar[fn](...args);
+  }
 }
 
 const cordova = new Cordova();

@@ -504,6 +504,11 @@ export default {
         steps.push(prevMode);
       }
       this.backTrigger = false;
+      if (v === 2) {
+        cordova.statusBarCall('styleDefault');
+      } else {
+        cordova.statusBarCall('styleLightContent');
+      }
       if (v === 1) {
         if (chaptersInfo) {
           return;
