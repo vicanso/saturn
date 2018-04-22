@@ -173,6 +173,9 @@ mixin ShelfView
     )
       .tac.font12.loadingFavs(
         v-if="isLoadingFavs"
+        :style=`{
+          top: (deviceInfo.mainNav + deviceInfo.paddingTop) + 'px',
+        }`
       ) 正在刷新中...
 
       v-touch(

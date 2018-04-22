@@ -104,6 +104,11 @@ export default {
           }
           break;
         }
+        // 如果重新切换至hot页面，但未有任务书籍，重新加载
+        case 'hot': {
+          this.loadMoreHotBooks();
+          break;
+        }
       }
     },
   },
