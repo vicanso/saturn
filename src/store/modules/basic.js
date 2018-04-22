@@ -22,7 +22,7 @@ const mutations = {
       const iPhoneX = ['iPhone10,3', 'iPhone10,6'];
       if (_.includes(iPhoneX, data.model)) {
         data.paddingTop = 32;
-        data.paddingBottom = 10;
+        data.paddingBottom = 15;
       } else {
         data.paddingTop = 20;
       }
