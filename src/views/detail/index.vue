@@ -66,6 +66,9 @@ mixin DetailView
             span(
               v-if="book.end"
             ) 完本
+          p.font12(
+            v-if="book.latestChapter"
+          ) 最新章节：{{book.latestChapter.title}}
       .briefView.font14 {{book.brief}}
       v-touch(
         v-on:tap="mode = 1"
