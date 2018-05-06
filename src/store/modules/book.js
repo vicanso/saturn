@@ -10,6 +10,7 @@ import {
   BOOKS_CATEGORIES,
   BOOKS_CHAPTERS,
   BOOKS_REQUEST,
+  BOOKS_RECOMMENDATIONS,
 } from '../../urls';
 import {
   BOOK_HOT_LIST,
@@ -321,6 +322,15 @@ const bookGetCacheSize = async ({commit}) => {
   commit(BOOK_CACHE_SIZE, _.round(size / (1024 * 1024), 2));
 };
 
+// 获取推荐书籍
+const bookGetRecommendations = async (tmp, no) => {
+  const url = BOOKS_RECOMMENDATIONS.replace(':no', no);
+  const res = await request.get(url);
+  const items = res.data.recommendations;
+  _.forEach(items, genCover);
+  return items;
+};
+
 export const actions = {
   bookHotList,
   bookAddSource,
@@ -337,6 +347,7 @@ export const actions = {
   bookRequestAdd,
   bookClearChapterCache,
   bookGetCacheSize,
+  bookGetRecommendations,
 };
 
 export default {

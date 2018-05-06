@@ -234,7 +234,7 @@ mixin MainNav
   }`
 )
   mt-header.font18.mainHeader(
-    title="闲书"
+    title="闲 书"
     v-if="deviceInfo.platform"
     fixed
     :style=`{

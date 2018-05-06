@@ -38,6 +38,7 @@ export default {
       currentReadInfo: null,
       showReload: false,
       themes,
+      recommendations: null,
     };
   },
   computed: {
@@ -61,7 +62,16 @@ export default {
       'userSaveReadInfo',
       'userSaveSetting',
       'userFavsToggle',
+      'bookGetRecommendations',
     ]),
+    showDetail(no) {
+      this.$router.push({
+        name: 'detail',
+        params: {
+          no,
+        },
+      });
+    },
     download() {
       this.$toast('该功能暂未开放');
     },
@@ -494,6 +504,29 @@ export default {
         this.showChapters(index);
       }
     },
+    async loadDetail(no) {
+      const close = this.$loading();
+      this.steps = [];
+      try {
+        const data = await this.bookGetDetail(no);
+        const {name, latestChapter} = data;
+        this.title = name;
+        if (latestChapter) {
+          const date = getDate(latestChapter.updatedAt);
+          this.updatedAt = date.substring(5, 16);
+        }
+        this.book = data;
+        this.currentReadInfo = await this.userGetReadInfo(no);
+        this.mode = 0;
+        this.bookGetRecommendations(no).then(data => {
+          this.recommendations = data;
+        });
+      } catch (err) {
+        this.$toast(err);
+      } finally {
+        close();
+      }
+    },
   },
   watch: {
     async mode(v, prevMode) {
@@ -525,25 +558,16 @@ export default {
   beforeDestroy() {
     cordova.removeListener('backbutton', this.clickBackButton);
   },
-  async beforeMount() {
-    const close = this.$loading();
+  beforeMount() {
     const {no} = this.$route.params;
-    this.steps = [];
-    try {
-      const data = await this.bookGetDetail(no);
-      const {name, latestChapter} = data;
-      this.title = name;
-      if (latestChapter) {
-        const date = getDate(latestChapter.updatedAt);
-        this.updatedAt = date.substring(5, 16);
-      }
-      this.book = data;
-      this.currentReadInfo = await this.userGetReadInfo(no);
-      this.mode = 0;
-    } catch (err) {
-      this.$toast(err);
-    } finally {
-      close();
+    this.loadDetail(no);
+  },
+  beforeRouteUpdate(to, from, next) {
+    const {name, params} = to;
+    if (name === 'detail') {
+      const {no} = params;
+      this.loadDetail(no);
     }
+    next();
   },
 };

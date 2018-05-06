@@ -5,7 +5,6 @@ $imageViewWidth: 100px
   padding-top: $MAIN_NAV_HEIGHT
   .infoView
     background-color: $COLOR_WHITE
-    margin-bottom: 15px
   .imageView
     float: left
     width: $imageViewWidth
@@ -26,11 +25,13 @@ $imageViewWidth: 100px
     border-top: $GRAY_BORDER
     line-height: 1.5em
     padding: 15px
+    background-color: $COLOR_WHITE
   .latestChapter
     border-top: $GRAY_BORDER
     line-height: 50px
     padding: 0 15px
     font-size: 14px
+    background-color: $COLOR_WHITE
     span, i
       color: $COLOR_GRAY
       margin: 0 2px
@@ -134,3 +135,33 @@ $imageViewWidth: 100px
   text-align: center
   height: $MAIN_HEADER_HEIGHT
   line-height: $MAIN_HEADER_HEIGHT
+
+.recommendations
+  margin-top: 10px
+  padding-top: 5px
+  border-top: $GRAY_BORDER
+  background-color: $COLOR_WHITE
+  ul
+    margin: 0
+    padding: 0
+    list-style: none
+    li
+      display: inline-block
+      width: 33.33%
+      padding: 5px
+      &:first-child
+        padding: 0 5px 0 10px
+      &:last-child
+        padding: 0 10px 0 5px
+      h5, h6
+        margin: 0
+        padding: 0
+      h5
+        color: $COLOR_DARK_GRAY
+        margin-top: 5px
+      h6
+        color: $COLOR_GRAY
+    .imageView
+      width: 100%
+      overflow: hidden
+      float: none

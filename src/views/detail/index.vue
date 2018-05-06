@@ -50,10 +50,10 @@ mixin DetailView
       paddingBottom: (deviceInfo.mainNav + deviceInfo.paddingBottom) + 'px',
     }`
   ): .fullHeightScroll
-    .infoView(
+    .mbottom10(
       v-if="book"
     )
-      .clearfix(
+      .clearfix.infoView(
         :style="{padding: '15px', height: '160px'}"
       )
         image-view.imageView(
@@ -81,6 +81,22 @@ mixin DetailView
           span.font12(
             v-if="book.latestChapter"
           ) 连载至{{book.latestChapter.no + 1}}章
+      .recommendations(
+        v-if='recommendations && recommendations.length'
+      )
+        ul
+          li(
+            v-for='item in recommendations'
+            :key='item.no'
+          )
+            v-touch(
+              v-on:tap="showDetail(item.no)"
+            )
+              image-view.imageView(
+                :src="item.cover"
+              )
+              h5.ellipsis {{item.name}}
+              h6.ellipsis {{item.author}}
 
 //- 章节列表
 mixin ChapterView
