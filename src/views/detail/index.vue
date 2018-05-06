@@ -84,6 +84,7 @@ mixin DetailView
       .recommendations(
         v-if='recommendations && recommendations.length'
       )
+        h3 热门推荐
         ul
           li(
             v-for='item in recommendations'
