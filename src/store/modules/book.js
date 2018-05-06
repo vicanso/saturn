@@ -325,7 +325,11 @@ const bookGetCacheSize = async ({commit}) => {
 // 获取推荐书籍
 const bookGetRecommendations = async (tmp, no) => {
   const url = BOOKS_RECOMMENDATIONS.replace(':no', no);
-  const res = await request.get(url);
+  const res = await request.get(url, {
+    params: {
+      limit: 4,
+    },
+  });
   const items = res.data.recommendations;
   _.forEach(items, genCover);
   return items;
