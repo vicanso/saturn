@@ -93,7 +93,7 @@ mixin DetailView
             v-touch(
               v-on:tap="showDetail(item.no)"
             )
-              image-view.imageView(
+              .imageView: image-view(
                 :src="item.cover"
               )
               h5.ellipsis {{item.name}}

@@ -36,9 +36,13 @@ export default {
       const target = entries[0];
       // 在元素可见时加载图标，并做diconnect
       if (target.isIntersecting) {
-        this.startToLoading = true;
         io.disconnect();
         this.io = null;
+        const img = new Image();
+        img.onload = () => {
+          this.startToLoading = true;
+        };
+        img.src = this.src;
       }
     });
     io.observe(this.$el);

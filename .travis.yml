@@ -1,0 +1,17 @@
+sudo: false
+language: node_js
+node_js:
+  - "10"
+
+services:
+  - docker
+
+script:
+  - yarn lint
+
+after_script:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker build -t saturn .
+  - docker images
+  - docker tag saturn $DOCKER_USERNAME/saturn
+  - docker push $DOCKER_USERNAME/saturn
