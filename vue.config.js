@@ -7,15 +7,15 @@ let urlPrefix = '/api';
 
 if (target === 'app') {
   output.publicPath = './';
-  urlPrefix = 'http://xs.aslant.site/api';
+  urlPrefix = 'https://xs.aslant.site/api';
 }
 
 module.exports = {
   devServer: {
     proxy: {
       '/api': {
-        // target: 'http://xs.aslant.site',
-        target: 'http://127.0.0.1:5018',
+        target: 'http://xs.aslant.site',
+        // target: 'http://127.0.0.1:5018',
       },
     },
   },

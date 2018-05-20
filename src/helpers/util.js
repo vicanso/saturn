@@ -65,7 +65,7 @@ export function getDefaultColors() {
     black: {
       backgroundColor: '#11100e',
       color: '#2d2c2b',
-      boxShadow: `${shadow} rgba(60, 60, 60, 0.8)`,
+      boxShadow: `${shadow} rgba(30, 30, 30, 0.8)`,
     },
     pinky: {
       backgroundColor: '#494446',
