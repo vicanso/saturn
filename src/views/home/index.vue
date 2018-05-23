@@ -5,14 +5,6 @@ mixin UserSettingView
     v-if="selected === 'userSetting' && userSetting && deviceInfo"
   )
     mt-cell(
-      :title="'' +userSetting.fontSize"
-      value="阅读字体"
-    )
-    mt-cell(
-      :title="userSetting.theme"
-      value="阅读主题"
-    )
-    mt-cell(
       :title="(bookCacheSize || '--') + 'MB'"
       value="缓存数据"
     )
@@ -163,6 +155,7 @@ mixin SearchView
 //- 书架页面
 mixin ShelfView
   .fullHeightScroll(
+    ref="shelfList"
     v-show="selected === 'shelf'"
   )
     loading(

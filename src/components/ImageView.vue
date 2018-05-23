@@ -18,9 +18,7 @@ div(
 
 <script>
 import cordova, {Connection} from '../helpers/cordova';
-import {
-  supportWebp,
-} from '../helpers/util';
+import {supportWebp} from '../helpers/util';
 
 export default {
   name: 'image-view',
@@ -48,7 +46,7 @@ export default {
         }
         let src = this.src;
         if (supportWebp()) {
-          src += '?type=webp'
+          src += '?type=webp';
         }
         this.imageSrc = src;
         io.disconnect();

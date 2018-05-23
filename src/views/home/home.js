@@ -301,7 +301,7 @@ export default {
       if (currentRoute) {
         return;
       }
-      const {hotList, categoryBookList} = $refs;
+      const {hotList, categoryBookList, shelfList} = $refs;
       let element;
       switch (selected) {
         case ids.hot:
@@ -309,6 +309,9 @@ export default {
           break;
         case ids.books:
           element = categoryBookList;
+          break;
+        case ids.shelf:
+          element = shelfList;
           break;
         default:
           break;
