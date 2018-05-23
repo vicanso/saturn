@@ -103,3 +103,27 @@ export function scrollTop(element, top, options) {
   );
   Velocity(element, 'scroll', opts);
 }
+
+
+let isSupportWebp = false;
+(function () {
+  const images = {
+    basic: 'data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAACyAgCdASoCAAEALmk0mk0iIiIiIgBoSygABc6zbAAA/v56QAAAAA==',
+    lossless: 'data:image/webp;base64,UklGRh4AAABXRUJQVlA4TBEAAAAvAQAAAAfQ//73v/+BiOh/AAA=',
+  };
+  const check = data => new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = resolve;
+    img.onerror = reject;
+    img.src = data;
+  });
+  Promise.all(_.map(images, check)).then(() => true)
+    .catch(() => false)
+    .then((result) => {
+      isSupportWebp = result;
+    });
+})();
+
+export function supportWebp() {
+  return isSupportWebp;
+}

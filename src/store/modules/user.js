@@ -13,7 +13,7 @@ import {
   USER_FAV_DETAIL_UPDATE,
 } from '../mutation-types';
 import {genPassword} from '../../helpers/util';
-import {urlPrefix} from '../../config';
+import {urlPrefix, version} from '../../config';
 
 const settingKey = 'user-setting';
 const favsKey = 'user-favs';
@@ -22,6 +22,7 @@ const readKeyPrefix = 'user-read-';
 const defaultUserSetting = {
   fontSize: 20,
   theme: 'yellow',
+  version,
 };
 
 const state = {

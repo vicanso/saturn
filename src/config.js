@@ -8,3 +8,6 @@ export const env = ENV;
 
 // eslint-disable-next-line
 export const target = TARGET;
+
+// eslint-disable-next-line
+export const version = VERSION;

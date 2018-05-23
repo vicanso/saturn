@@ -14,6 +14,7 @@ const ids = {
   hot: 'hot',
   books: 'books',
   find: 'find',
+  userSetting: 'userSetting',
 };
 
 export default {
@@ -122,7 +123,16 @@ export default {
       'userFavsToggle',
       'bookRequestAdd',
       'bookClearChapterCache',
+      'bookGetCacheSize',
     ]),
+    showSetting() {
+      const {selected} = this;
+      if (selected === ids.userSetting) {
+        return;
+      }
+      this.selected = ids.userSetting;
+      this.bookGetCacheSize();
+    },
     async clearCache() {
       const close = this.$loading();
       try {

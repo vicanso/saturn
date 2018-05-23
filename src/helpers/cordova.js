@@ -3,6 +3,10 @@ import _ from 'lodash';
 
 import {target} from '../config';
 
+export const Connection = {
+  wifi: 'wifi',
+};
+
 class Cordova extends EventEmitter {
   constructor() {
     super();
@@ -49,6 +53,9 @@ class Cordova extends EventEmitter {
       return;
     }
     window.StatusBar[fn](...args);
+  }
+  getConnectionType() {
+    return _.get(window, 'navigator.connection.type', Connection.wifi);
   }
 }
 

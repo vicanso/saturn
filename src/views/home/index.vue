@@ -13,15 +13,19 @@ mixin UserSettingView
       value="阅读主题"
     )
     mt-cell(
-      :title="bookCacheSize + 'MB'"
+      :title="(bookCacheSize || '--') + 'MB'"
       value="缓存数据"
+    )
+    mt-cell(
+      :title="userSetting.version"
+      value="软件版本"
     )
     mt-cell(
       :title="deviceInfo.version" 
       value="系统版本"
     )
     mt-cell(
-      :title="userInfo.track" 
+      :title="userInfo && userInfo.track" 
       value="设备标识"
     )
     mt-cell(
@@ -244,7 +248,7 @@ mixin MainNav
     v-touch.bold.userSetting(
       tag="a"
       slot="right"
-      v-on:tap="selected = 'userSetting'"
+      v-on:tap="showSetting()"
     )
       i.iconfont.icon-set
   +MainNav

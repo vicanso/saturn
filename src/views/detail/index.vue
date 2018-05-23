@@ -81,11 +81,11 @@ mixin DetailView
           span.font12(
             v-if="book.latestChapter"
           ) 连载至{{book.latestChapter.no + 1}}章
-      .recommendations(
-        v-if='recommendations && recommendations.length'
-      )
+      .recommendations
         h3 热门推荐
-        ul
+        ul(
+          v-if='recommendations'
+        )
           li(
             v-for='item in recommendations'
             :key='item.no'
@@ -98,6 +98,10 @@ mixin DetailView
               )
               h5.ellipsis {{item.name}}
               h6.ellipsis {{item.author}}
+        p.tac(
+          v-else
+        ) 加载中...
+        
 
 //- 章节列表
 mixin ChapterView

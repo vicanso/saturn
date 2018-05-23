@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 
+const pkg = require('./package.json');
 const target = process.env.VUE_APP_TARGET || 'web';
 
 const output = {};
@@ -26,6 +27,7 @@ module.exports = {
         ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
         URL_PREFIX: JSON.stringify(urlPrefix),
         TARGET: JSON.stringify(target),
+        VERSION: JSON.stringify(pkg.version),
       }),
     ],
   },

@@ -22,17 +22,7 @@ export default {
       'userGetSetting',
       'userGetFavs',
       'basicDeviceInfo',
-      'bookGetCacheSize',
     ]),
-    async refreshCacheSize() {
-      try {
-        await this.bookGetCacheSize();
-      } finally {
-        setTimeout(() => {
-          this.refreshCacheSize();
-        }, 120 * 1000);
-      }
-    },
   },
   data() {
     return {};
@@ -44,7 +34,6 @@ export default {
       await this.userGetSetting();
       await this.userGetInfo();
       await this.userGetFavs();
-      this.refreshCacheSize();
     } catch (err) {
       this.$toast(err);
     }

@@ -12,11 +12,16 @@ div(
       margin: 'auto',
     }`
     v-if="startToLoading"
-    :src="src"
+    :src="imageSrc"
   )
 </template>
 
 <script>
+import cordova, {Connection} from '../helpers/cordova';
+import {
+  supportWebp,
+} from '../helpers/util';
+
 export default {
   name: 'image-view',
   props: {
@@ -29,6 +34,7 @@ export default {
     return {
       // 如果为true则加载img
       startToLoading: false,
+      imageSrc: '',
     };
   },
   mounted() {
@@ -36,13 +42,22 @@ export default {
       const target = entries[0];
       // 在元素可见时加载图标，并做diconnect
       if (target.isIntersecting) {
+        const type = cordova.getConnectionType();
+        if (type != Connection.wifi) {
+          return;
+        }
+        let src = this.src;
+        if (supportWebp()) {
+          src += '?type=webp'
+        }
+        this.imageSrc = src;
         io.disconnect();
         this.io = null;
         const img = new Image();
         img.onload = () => {
           this.startToLoading = true;
         };
-        img.src = this.src;
+        img.src = src;
       }
     });
     io.observe(this.$el);
