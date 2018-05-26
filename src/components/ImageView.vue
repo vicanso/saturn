@@ -46,7 +46,9 @@ export default {
         }
         let src = this.src;
         if (supportWebp()) {
-          src += '?type=webp';
+          src += '?type=webp&quality=80';
+        } else {
+          src += '?quality=90';
         }
         this.imageSrc = src;
         io.disconnect();
