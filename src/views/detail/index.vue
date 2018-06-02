@@ -83,7 +83,7 @@ mixin DetailView
           ) 连载至{{book.latestChapter.no + 1}}章
       .recommendations
         h3 热门推荐
-        ul(
+        ul.clearfix(
           v-if='recommendations'
         )
           li(
@@ -94,6 +94,7 @@ mixin DetailView
               v-on:tap="showDetail(item.no)"
             )
               .imageView: image-view(
+                fixedCenter
                 :src="item.cover"
               )
               h5.ellipsis {{item.name}}

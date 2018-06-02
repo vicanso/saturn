@@ -15,7 +15,8 @@ module.exports = {
   devServer: {
     proxy: {
       '/api': {
-        target: 'http://xs.aslant.site',
+        target: 'https://xs.aslant.site',
+        changeOrigin: true,
         // target: 'http://127.0.0.1:5018',
       },
     },
