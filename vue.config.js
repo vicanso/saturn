@@ -8,7 +8,7 @@ let urlPrefix = '/api';
 
 if (target === 'app') {
   output.publicPath = './';
-  urlPrefix = 'https://xs.aslant.site/api';
+  urlPrefix = 'http://47.52.232.157/api';
 }
 
 module.exports = {
