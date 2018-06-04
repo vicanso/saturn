@@ -4,18 +4,19 @@ const pkg = require('./package.json');
 const target = process.env.VUE_APP_TARGET || 'web';
 
 const output = {};
+const apiUrl = 'http://47.52.232.157';
 let urlPrefix = '/api';
 
 if (target === 'app') {
   output.publicPath = './';
-  urlPrefix = 'http://47.52.232.157/api';
+  urlPrefix = apiUrl + urlPrefix;
 }
 
 module.exports = {
   devServer: {
     proxy: {
       '/api': {
-        target: 'https://xs.aslant.site',
+        target: apiUrl,
         changeOrigin: true,
         // target: 'http://127.0.0.1:5018',
       },
