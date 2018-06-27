@@ -28,8 +28,8 @@ mixin FunctionView
       v-on:tap="goOnReading()"
     )
       i.iconfont.icon-office
-      span(v-if="currentReadInfo") 免费阅读
-      span(v-else) 继续阅读
+      span(v-if="currentReadInfo") 继续阅读
+      span(v-else) 免费阅读
     v-touch(
       tag="a"
       href="javascript:;"
